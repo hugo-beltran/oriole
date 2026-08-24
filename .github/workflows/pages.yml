@@ -1,0 +1,35 @@
+name: Deploy showcase to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - run: bun run build:showcase
+      # SPA fallback: GitHub Pages serves 404.html for unknown paths,
+      # letting deep links into router routes load the app.
+      - run: cp showcase/dist/index.html showcase/dist/404.html
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: showcase/dist
+      - id: deployment
+        uses: actions/deploy-pages@v4

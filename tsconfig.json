@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "target": "es2022",
+    "lib": ["es2022", "dom", "dom.iterable"],
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "strict": true,
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "skipLibCheck": true,
+    "noUncheckedIndexedAccess": true,
+    "noEmit": true,
+    "types": ["vite/client"],
+    "paths": {
+      "@mycodemedia/oriole": ["./src/index.ts"],
+      "@mycodemedia/oriole/theme.css": ["./src/styles/theme.css"]
+    }
+  },
+  "include": [
+    "src",
+    "test",
+    "showcase/src",
+    "vitest.config.ts",
+    "showcase/vite.config.ts"
+  ]
+}

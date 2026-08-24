@@ -1,0 +1,261 @@
+/*
+ * Oriole brand tokens.
+ *
+ * Consumers re-brand by redefining the --or-* custom properties — in :root,
+ * a .dark scope, or any subtree. No Tailwind rebuild of the library required.
+ *
+ * Consumer wiring (in the app's main CSS):
+ *   @import "tailwindcss";
+ *   @import "@mycodemedia/oriole/theme.css";
+ *   @source "../node_modules/@mycodemedia/oriole/dist";
+ */
+
+:root {
+  /* Nectarine brand ramp, hue-rotated −10° from the anchored design
+     (100 golden → 400 brand → 900 red). Tints cool toward gold and shades
+     warm toward red, wrapping through 360 at the dark end. */
+  --or-nectarine-50: oklch(96% 0.022 87.63);
+  --or-nectarine-100: oklch(90% 0.03 74.81);
+  --or-nectarine-200: oklch(83% 0.048 62.74);
+  --or-nectarine-300: oklch(79% 0.069 51.41);
+  --or-nectarine-400: oklch(73% 0.087 40.83);
+  --or-nectarine-500: oklch(65% 0.095 31);
+  --or-nectarine-600: oklch(56% 0.093 21.92);
+  --or-nectarine-700: oklch(50% 0.088 13.58);
+  --or-nectarine-800: oklch(44% 0.081 5.99);
+  --or-nectarine-900: oklch(38% 0.071 359.15);
+  --or-nectarine-950: oklch(26% 0.06 353.05);
+
+  /* Fern ramp, seeded from --or-fern-ash at the 700 slot. The mirror of
+     nectarine: tints hold a fresh green (hue near-static 124→128 through 200)
+     and the shades carry the motion, sweeping green → teal → petrol to 188
+     at the dark end. */
+  --or-fern-50: oklch(96% 0.015 124);
+  --or-fern-100: oklch(90% 0.019 125.73);
+  --or-fern-200: oklch(83% 0.03 127.93);
+  --or-fern-300: oklch(79% 0.043 130.72);
+  --or-fern-400: oklch(73% 0.054 134.28);
+  --or-fern-500: oklch(65% 0.058 138.8);
+  --or-fern-600: oklch(56% 0.057 144.55);
+  --or-fern-700: oklch(49.22% 0.0534 151.85);
+  --or-fern-800: oklch(44% 0.048 161.15);
+  --or-fern-900: oklch(38% 0.041 173);
+  --or-fern-950: oklch(26% 0.034 188);
+
+  /* Driftwood ramp, the muted neutral for discrete elements (borders, muted
+     text, quiet surfaces). Inverted chroma: tints are near-gray so light
+     surfaces stay crisp, and warmth accumulates toward the dark end
+     (0.00414 → 0.02) while hue drifts gold → umber (80 → 58). */
+  --or-driftwood-50: oklch(96% 0.00414 80);
+  --or-driftwood-100: oklch(90% 0.0046 77.3);
+  --or-driftwood-200: oklch(83% 0.0058 74.71);
+  --or-driftwood-300: oklch(79% 0.0076 72.23);
+  --or-driftwood-400: oklch(73% 0.0097 69.87);
+  --or-driftwood-500: oklch(65% 0.0121 67.61);
+  --or-driftwood-600: oklch(56% 0.0144 65.47);
+  --or-driftwood-700: oklch(50% 0.0166 63.43);
+  --or-driftwood-800: oklch(44% 0.0184 61.51);
+  --or-driftwood-900: oklch(38% 0.0196 59.7);
+  --or-driftwood-950: oklch(26% 0.02 58);
+
+  /* Foxglove ramp, the vivid accent. Seeded from orchid #da70d6 (hue kept
+     exactly at 400), #800080 and #2e0854, eased into one geometric hue sweep
+     (330.55 → 299.92, motion accelerating into the shades, like fern).
+     Chroma peaks at 800 — the dark purples carry the saturation — and every
+     step stays ≤ 89% of its sRGB gamut ceiling. */
+  --or-foxglove-50: oklch(96% 0.024 330.55);
+  --or-foxglove-100: oklch(90% 0.066 330.34);
+  --or-foxglove-200: oklch(83% 0.099 330.01);
+  --or-foxglove-300: oklch(79% 0.127 329.5);
+  --or-foxglove-400: oklch(73% 0.15 328.7);
+  --or-foxglove-500: oklch(65% 0.167 327.47);
+  --or-foxglove-600: oklch(56% 0.18 325.57);
+  --or-foxglove-700: oklch(50% 0.188 322.61);
+  --or-foxglove-800: oklch(44% 0.19 318.03);
+  --or-foxglove-900: oklch(38% 0.17 310.93);
+  --or-foxglove-950: oklch(26% 0.123 299.92);
+
+  /* Canvas atmosphere — only the stops referenced by --background-image-canvas */
+  --or-verdant: oklch(49.11% 0.0934 154.29);
+  --or-fern-ash: oklch(49.22% 0.0534 151.85);
+  --or-canopy-glow: oklch(66.21% 0.1179 155.4);
+  --or-foam: oklch(82.4% 0.0692 162.26);
+  --or-burnt-sienna: oklch(56.39% 0.1651 39.19);
+  --or-terracotta: oklch(63.78% 0.1586 39.17);
+  --or-clay: oklch(58.76% 0.1285 49.1);
+  --or-linen: oklch(92.72% 0.0178 81.33);
+  --or-parchment: oklch(96.28% 0.0119 79.78);
+
+  --or-background: oklch(1 0 0);
+  --or-foreground: oklch(0.145 0 0);
+
+  --or-card: oklch(1 0 0);
+  --or-card-foreground: oklch(0.145 0 0);
+
+  --or-popover: oklch(1 0 0);
+  --or-popover-foreground: oklch(0.145 0 0);
+
+  --or-primary: var(--or-nectarine-400);
+  --or-primary-foreground: oklch(0.145 0 0);
+
+  --or-secondary: oklch(0.97 0 0);
+  --or-secondary-foreground: oklch(0.205 0 0);
+
+  --or-muted: oklch(0.97 0 0);
+  --or-muted-foreground: oklch(0.556 0 0);
+
+  --or-accent: oklch(0.97 0 0);
+  --or-accent-foreground: oklch(0.205 0 0);
+
+  --or-destructive: oklch(0.577 0.245 27.325);
+  --or-destructive-foreground: oklch(0.985 0 0);
+
+  --or-border: oklch(0.922 0 0);
+  --or-input: oklch(0.922 0 0);
+  /* darker nectarine: the brand tone at 73% lightness misses the 3:1
+     non-text contrast minimum against white */
+  --or-ring: var(--or-nectarine-600);
+
+  --or-radius: 0.5rem;
+}
+
+.dark {
+  --or-background: oklch(0.145 0 0);
+  --or-foreground: oklch(0.985 0 0);
+
+  --or-card: oklch(0.205 0 0);
+  --or-card-foreground: oklch(0.985 0 0);
+
+  --or-popover: oklch(0.205 0 0);
+  --or-popover-foreground: oklch(0.985 0 0);
+
+  --or-primary: var(--or-nectarine-400);
+  --or-primary-foreground: oklch(0.145 0 0);
+
+  --or-secondary: oklch(0.269 0 0);
+  --or-secondary-foreground: oklch(0.985 0 0);
+
+  --or-muted: oklch(0.269 0 0);
+  --or-muted-foreground: oklch(0.708 0 0);
+
+  --or-accent: oklch(0.269 0 0);
+  --or-accent-foreground: oklch(0.985 0 0);
+
+  --or-destructive: oklch(0.704 0.191 22.216);
+  --or-destructive-foreground: oklch(0.985 0 0);
+
+  --or-border: oklch(1 0 0 / 10%);
+  --or-input: oklch(1 0 0 / 15%);
+  --or-ring: var(--or-nectarine-400);
+}
+
+@theme inline {
+  --color-nectarine-50: var(--or-nectarine-50);
+  --color-nectarine-100: var(--or-nectarine-100);
+  --color-nectarine-200: var(--or-nectarine-200);
+  --color-nectarine-300: var(--or-nectarine-300);
+  --color-nectarine-400: var(--or-nectarine-400);
+  --color-nectarine-500: var(--or-nectarine-500);
+  --color-nectarine-600: var(--or-nectarine-600);
+  --color-nectarine-700: var(--or-nectarine-700);
+  --color-nectarine-800: var(--or-nectarine-800);
+  --color-nectarine-900: var(--or-nectarine-900);
+  --color-nectarine-950: var(--or-nectarine-950);
+
+  --color-fern-50: var(--or-fern-50);
+  --color-fern-100: var(--or-fern-100);
+  --color-fern-200: var(--or-fern-200);
+  --color-fern-300: var(--or-fern-300);
+  --color-fern-400: var(--or-fern-400);
+  --color-fern-500: var(--or-fern-500);
+  --color-fern-600: var(--or-fern-600);
+  --color-fern-700: var(--or-fern-700);
+  --color-fern-800: var(--or-fern-800);
+  --color-fern-900: var(--or-fern-900);
+  --color-fern-950: var(--or-fern-950);
+
+  --color-driftwood-50: var(--or-driftwood-50);
+  --color-driftwood-100: var(--or-driftwood-100);
+  --color-driftwood-200: var(--or-driftwood-200);
+  --color-driftwood-300: var(--or-driftwood-300);
+  --color-driftwood-400: var(--or-driftwood-400);
+  --color-driftwood-500: var(--or-driftwood-500);
+  --color-driftwood-600: var(--or-driftwood-600);
+  --color-driftwood-700: var(--or-driftwood-700);
+  --color-driftwood-800: var(--or-driftwood-800);
+  --color-driftwood-900: var(--or-driftwood-900);
+  --color-driftwood-950: var(--or-driftwood-950);
+
+  --color-foxglove-50: var(--or-foxglove-50);
+  --color-foxglove-100: var(--or-foxglove-100);
+  --color-foxglove-200: var(--or-foxglove-200);
+  --color-foxglove-300: var(--or-foxglove-300);
+  --color-foxglove-400: var(--or-foxglove-400);
+  --color-foxglove-500: var(--or-foxglove-500);
+  --color-foxglove-600: var(--or-foxglove-600);
+  --color-foxglove-700: var(--or-foxglove-700);
+  --color-foxglove-800: var(--or-foxglove-800);
+  --color-foxglove-900: var(--or-foxglove-900);
+  --color-foxglove-950: var(--or-foxglove-950);
+
+  --color-verdant: var(--or-verdant);
+  --color-fern-ash: var(--or-fern-ash);
+  --color-canopy-glow: var(--or-canopy-glow);
+  --color-foam: var(--or-foam);
+  --color-burnt-sienna: var(--or-burnt-sienna);
+  --color-terracotta: var(--or-terracotta);
+  --color-clay: var(--or-clay);
+  --color-linen: var(--or-linen);
+  --color-parchment: var(--or-parchment);
+
+  --color-background: var(--or-background);
+  --color-foreground: var(--or-foreground);
+
+  --color-card: var(--or-card);
+  --color-card-foreground: var(--or-card-foreground);
+
+  --color-popover: var(--or-popover);
+  --color-popover-foreground: var(--or-popover-foreground);
+
+  --color-primary: var(--or-primary);
+  --color-primary-foreground: var(--or-primary-foreground);
+
+  --color-secondary: var(--or-secondary);
+  --color-secondary-foreground: var(--or-secondary-foreground);
+
+  --color-muted: var(--or-muted);
+  --color-muted-foreground: var(--or-muted-foreground);
+
+  --color-accent: var(--or-accent);
+  --color-accent-foreground: var(--or-accent-foreground);
+
+  --color-destructive: var(--or-destructive);
+  --color-destructive-foreground: var(--or-destructive-foreground);
+
+  --color-border: var(--or-border);
+  --color-input: var(--or-input);
+  --color-ring: var(--or-ring);
+
+  --radius-sm: calc(var(--or-radius) - 0.25rem);
+  --radius-md: calc(var(--or-radius) - 0.125rem);
+  --radius-lg: var(--or-radius);
+  --radius-xl: calc(var(--or-radius) + 0.25rem);
+
+  --background-image-undergrowth:
+    radial-gradient(at 80% 0%, var(--or-fern-100) 0px, transparent 50%),
+    radial-gradient(at 0% 0%, var(--or-driftwood-100) 0px, transparent 50%),
+    radial-gradient(at 45% 30%, var(--or-fern-200) 0px, transparent 50%),
+    radial-gradient(at 0% 75%, var(--or-fern-300) 0px, transparent 50%),
+    radial-gradient(at 92% 60%, var(--or-driftwood-200) 0px, transparent 50%),
+    radial-gradient(at 60% 100%, var(--or-fern-200) 0px, transparent 50%),
+    radial-gradient(at 25% 45%, var(--or-fern-50) 0px, transparent 50%);
+
+  --background-image-washed-paper:
+    radial-gradient(at 30% 0%, var(--or-driftwood-100) 0px, transparent 50%),
+    radial-gradient(at 90% -20%, var(--or-nectarine-200) 0px, transparent 50%),
+    radial-gradient(at 0% 95%, var(--or-nectarine-400) 200px, transparent 50%),
+    radial-gradient(at 65% 60%, var(--or-driftwood-200) 0px, transparent 50%),
+    radial-gradient(at 100% 92%, var(--or-driftwood-400) 0px, transparent 50%),
+    radial-gradient(at 25% 100%, var(--or-driftwood-200) 0px, transparent 50%),
+    radial-gradient(at 55% 25%, var(--or-driftwood-50) 0px, transparent 50%);
+}

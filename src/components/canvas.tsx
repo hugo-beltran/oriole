@@ -1,29 +1,29 @@
-import type { PropsWithChildren } from "react";
-import { BackgroundNoise } from "./background-noise";
-import { cva, type VariantProps } from "class-variance-authority";
+import { cva, type VariantProps } from "class-variance-authority"
+import type { PropsWithChildren } from "react"
+import { BackgroundNoise } from "./background-noise"
 
 const canvasVariants = cva(
-  "flex min-h-screen bg-canvas text-foreground relative",
+  "flex min-h-screen bg-driftwood-100 bg-lava-lamp text-foreground relative",
   {
     variants: {
-      hue: {
-        cool: "bg-driftwood-100 bg-undergrowth",
-        warm: "bg-driftwood-100 bg-washed-paper",
+      animated: {
+        true: "animate-mesh-drift motion-reduce:animate-none",
+        false: "",
       },
     },
     defaultVariants: {
-      hue: "cool",
+      animated: false,
     },
   },
-);
+)
 
-type CanvasProps = PropsWithChildren<VariantProps<typeof canvasVariants>>;
+type CanvasProps = PropsWithChildren<VariantProps<typeof canvasVariants>>
 
-export function Canvas({ children, hue }: CanvasProps) {
+export function Canvas({ children, animated }: CanvasProps) {
   return (
-    <div className={canvasVariants({ hue })}>
+    <div className={canvasVariants({ animated })}>
       <BackgroundNoise />
       {children}
     </div>
-  );
+  )
 }

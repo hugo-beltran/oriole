@@ -7,7 +7,7 @@ export function Page(props: {
 }) {
   return (
     <article className="max-w-3xl">
-      <h1 className="text-3xl font-bold">{props.title}</h1>
+      <h1 className="font-display text-3xl font-bold">{props.title}</h1>
       <p className="mt-2 text-muted-foreground">{props.description}</p>
       <div className="mt-10 space-y-12">{props.children}</div>
     </article>

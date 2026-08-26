@@ -1,7 +1,7 @@
-import { useId } from "react";
+import { useId } from "react"
 
 export function BackgroundNoise() {
-  const id = useId();
+  const id = useId()
 
   return (
     <svg
@@ -20,5 +20,5 @@ export function BackgroundNoise() {
       </filter>
       <rect width="100%" height="100%" filter={`url(#${id})`} opacity="0.016" />
     </svg>
-  );
+  )
 }

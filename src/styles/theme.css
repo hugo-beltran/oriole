@@ -10,26 +10,88 @@
  *   @source "../node_modules/@mycodemedia/oriole/dist";
  */
 
-:root {
-  /* Nectarine brand ramp, hue-rotated −10° from the anchored design
-     (100 golden → 400 brand → 900 red). Tints cool toward gold and shades
-     warm toward red, wrapping through 360 at the dark end. */
-  --or-nectarine-50: oklch(96% 0.022 87.63);
-  --or-nectarine-100: oklch(90% 0.03 74.81);
-  --or-nectarine-200: oklch(83% 0.048 62.74);
-  --or-nectarine-300: oklch(79% 0.069 51.41);
-  --or-nectarine-400: oklch(73% 0.087 40.83);
-  --or-nectarine-500: oklch(65% 0.095 31);
-  --or-nectarine-600: oklch(56% 0.093 21.92);
-  --or-nectarine-700: oklch(50% 0.088 13.58);
-  --or-nectarine-800: oklch(44% 0.081 5.99);
-  --or-nectarine-900: oklch(38% 0.071 359.15);
-  --or-nectarine-950: oklch(26% 0.06 353.05);
+/* Display face — Libre Baskerville, self-hosted via Fontsource (the package
+   is a dependency of this library, so consumer bundlers resolve these). */
+@import "@fontsource/libre-baskerville/400.css";
+@import "@fontsource/libre-baskerville/400-italic.css";
+@import "@fontsource/libre-baskerville/700.css";
 
-  /* Fern ramp, seeded from --or-fern-ash at the 700 slot. The mirror of
-     nectarine: tints hold a fresh green (hue near-static 124→128 through 200)
-     and the shades carry the motion, sweeping green → teal → petrol to 188
-     at the dark end. */
+/* Mesh drift offsets and alphas — typed so the browser can interpolate them.
+   The gradient mesh adds the offsets to its literal blob positions and
+   scales each blob's color through its alpha; everything rests at the static
+   mesh (0% offset, 100% alpha) unless animate-mesh-drift runs. Browsers
+   without @property fall back to the static mesh via the var() fallbacks.
+   Three groups shared across blobs, each driven by its own animation with a
+   different period, so the layers float and fade out of phase with each
+   other — lava-lamp style — rather than in lockstep. */
+@property --or-mesh-drift-1-x {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 0%;
+}
+@property --or-mesh-drift-1-y {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 0%;
+}
+@property --or-mesh-drift-2-x {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 0%;
+}
+@property --or-mesh-drift-2-y {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 0%;
+}
+@property --or-mesh-drift-3-x {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 0%;
+}
+@property --or-mesh-drift-3-y {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 0%;
+}
+@property --or-mesh-alpha-1 {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 100%;
+}
+@property --or-mesh-alpha-2 {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 100%;
+}
+@property --or-mesh-alpha-3 {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 100%;
+}
+
+:root {
+  /* Nectarine brand ramp. Tints seeded from vivid orange references —
+     200 pinned to #FFB634's hue (76.57), 400 to #F87534's (44.14) — with
+     chroma rising to a 0.152 peak at 400 (87% of the sRGB ceiling; 300
+     rides the 89% rail). Shades fall away on a cosine and keep the violet
+     descent, wrapping through 360 to 353 at the dark end. */
+  --or-nectarine-50: oklch(96% 0.04 90);
+  --or-nectarine-100: oklch(90% 0.0831 83.98);
+  --or-nectarine-200: oklch(83% 0.118 76.57);
+  --or-nectarine-300: oklch(79% 0.134 61.11);
+  --or-nectarine-400: oklch(73% 0.152 44.14);
+  --or-nectarine-500: oklch(65% 0.1376 33.29);
+  --or-nectarine-600: oklch(56% 0.1227 22.77);
+  --or-nectarine-700: oklch(50% 0.1025 13.58);
+  --or-nectarine-800: oklch(44% 0.0823 6.14);
+  --or-nectarine-900: oklch(38% 0.0674 359.59);
+  --or-nectarine-950: oklch(26% 0.062 353.05);
+
+  /* Fern ramp, seeded at the 700 slot (the old fern-ash green). The mirror
+     of nectarine: tints hold a fresh green (hue near-static 124→128 through
+     200) and the shades carry the motion, sweeping green → teal → petrol to
+     188 at the dark end. */
   --or-fern-50: oklch(96% 0.015 124);
   --or-fern-100: oklch(90% 0.019 125.73);
   --or-fern-200: oklch(83% 0.03 127.93);
@@ -58,33 +120,22 @@
   --or-driftwood-900: oklch(38% 0.0196 59.7);
   --or-driftwood-950: oklch(26% 0.02 58);
 
-  /* Foxglove ramp, the vivid accent. Seeded from orchid #da70d6 (hue kept
-     exactly at 400), #800080 and #2e0854, eased into one geometric hue sweep
-     (330.55 → 299.92, motion accelerating into the shades, like fern).
-     Chroma peaks at 800 — the dark purples carry the saturation — and every
-     step stays ≤ 89% of its sRGB gamut ceiling. */
-  --or-foxglove-50: oklch(96% 0.024 330.55);
-  --or-foxglove-100: oklch(90% 0.066 330.34);
-  --or-foxglove-200: oklch(83% 0.099 330.01);
-  --or-foxglove-300: oklch(79% 0.127 329.5);
-  --or-foxglove-400: oklch(73% 0.15 328.7);
-  --or-foxglove-500: oklch(65% 0.167 327.47);
-  --or-foxglove-600: oklch(56% 0.18 325.57);
-  --or-foxglove-700: oklch(50% 0.188 322.61);
-  --or-foxglove-800: oklch(44% 0.19 318.03);
-  --or-foxglove-900: oklch(38% 0.17 310.93);
-  --or-foxglove-950: oklch(26% 0.123 299.92);
-
-  /* Canvas atmosphere — only the stops referenced by --background-image-canvas */
-  --or-verdant: oklch(49.11% 0.0934 154.29);
-  --or-fern-ash: oklch(49.22% 0.0534 151.85);
-  --or-canopy-glow: oklch(66.21% 0.1179 155.4);
-  --or-foam: oklch(82.4% 0.0692 162.26);
-  --or-burnt-sienna: oklch(56.39% 0.1651 39.19);
-  --or-terracotta: oklch(63.78% 0.1586 39.17);
-  --or-clay: oklch(58.76% 0.1285 49.1);
-  --or-linen: oklch(92.72% 0.0178 81.33);
-  --or-parchment: oklch(96.28% 0.0119 79.78);
+  /* Plum ramp, the accent — foxglove's successor, dialed back into fern's
+     register: chroma peaks at 0.076 at the 500 slot (~1.3× fern's 0.058),
+     so the purple reads structural rather than emphatic. Keeps foxglove's
+     geometric hue sweep (330.55 → 299.92, motion accelerating into the
+     shades). */
+  --or-plum-50: oklch(96% 0.02 330.55);
+  --or-plum-100: oklch(90% 0.028 330.34);
+  --or-plum-200: oklch(83% 0.042 330.01);
+  --or-plum-300: oklch(79% 0.054 329.5);
+  --or-plum-400: oklch(73% 0.066 328.7);
+  --or-plum-500: oklch(65% 0.076 327.47);
+  --or-plum-600: oklch(56% 0.074 325.57);
+  --or-plum-700: oklch(50% 0.069 322.61);
+  --or-plum-800: oklch(44% 0.062 318.03);
+  --or-plum-900: oklch(38% 0.053 310.93);
+  --or-plum-950: oklch(26% 0.044 299.92);
 
   --or-background: oklch(1 0 0);
   --or-foreground: oklch(0.145 0 0);
@@ -95,8 +146,10 @@
   --or-popover: oklch(1 0 0);
   --or-popover-foreground: oklch(0.145 0 0);
 
-  --or-primary: var(--or-nectarine-400);
-  --or-primary-foreground: oklch(0.145 0 0);
+  /* light text: near-black on plum-600 lands at 4.1:1, under the 4.5:1
+     normal-text minimum; near-white clears it at 4.6:1 */
+  --or-primary: var(--or-plum-600);
+  --or-primary-foreground: oklch(0.985 0 0);
 
   --or-secondary: oklch(0.97 0 0);
   --or-secondary-foreground: oklch(0.205 0 0);
@@ -117,6 +170,8 @@
   --or-ring: var(--or-nectarine-600);
 
   --or-radius: 0.5rem;
+
+  --or-font-display: "Libre Baskerville", ui-serif, Georgia, serif;
 }
 
 .dark {
@@ -129,8 +184,10 @@
   --or-popover: oklch(0.205 0 0);
   --or-popover-foreground: oklch(0.985 0 0);
 
-  --or-primary: var(--or-nectarine-400);
-  --or-primary-foreground: oklch(0.145 0 0);
+  /* plum-600 also clears contrast on the dark ground: 4.1:1 as a surface,
+     4.6:1 under the near-white text */
+  --or-primary: var(--or-plum-600);
+  --or-primary-foreground: oklch(0.985 0 0);
 
   --or-secondary: oklch(0.269 0 0);
   --or-secondary-foreground: oklch(0.985 0 0);
@@ -186,27 +243,17 @@
   --color-driftwood-900: var(--or-driftwood-900);
   --color-driftwood-950: var(--or-driftwood-950);
 
-  --color-foxglove-50: var(--or-foxglove-50);
-  --color-foxglove-100: var(--or-foxglove-100);
-  --color-foxglove-200: var(--or-foxglove-200);
-  --color-foxglove-300: var(--or-foxglove-300);
-  --color-foxglove-400: var(--or-foxglove-400);
-  --color-foxglove-500: var(--or-foxglove-500);
-  --color-foxglove-600: var(--or-foxglove-600);
-  --color-foxglove-700: var(--or-foxglove-700);
-  --color-foxglove-800: var(--or-foxglove-800);
-  --color-foxglove-900: var(--or-foxglove-900);
-  --color-foxglove-950: var(--or-foxglove-950);
-
-  --color-verdant: var(--or-verdant);
-  --color-fern-ash: var(--or-fern-ash);
-  --color-canopy-glow: var(--or-canopy-glow);
-  --color-foam: var(--or-foam);
-  --color-burnt-sienna: var(--or-burnt-sienna);
-  --color-terracotta: var(--or-terracotta);
-  --color-clay: var(--or-clay);
-  --color-linen: var(--or-linen);
-  --color-parchment: var(--or-parchment);
+  --color-plum-50: var(--or-plum-50);
+  --color-plum-100: var(--or-plum-100);
+  --color-plum-200: var(--or-plum-200);
+  --color-plum-300: var(--or-plum-300);
+  --color-plum-400: var(--or-plum-400);
+  --color-plum-500: var(--or-plum-500);
+  --color-plum-600: var(--or-plum-600);
+  --color-plum-700: var(--or-plum-700);
+  --color-plum-800: var(--or-plum-800);
+  --color-plum-900: var(--or-plum-900);
+  --color-plum-950: var(--or-plum-950);
 
   --color-background: var(--or-background);
   --color-foreground: var(--or-foreground);
@@ -241,21 +288,157 @@
   --radius-lg: var(--or-radius);
   --radius-xl: calc(var(--or-radius) + 0.25rem);
 
-  --background-image-undergrowth:
-    radial-gradient(at 80% 0%, var(--or-fern-100) 0px, transparent 50%),
-    radial-gradient(at 0% 0%, var(--or-driftwood-100) 0px, transparent 50%),
-    radial-gradient(at 45% 30%, var(--or-fern-200) 0px, transparent 50%),
-    radial-gradient(at 0% 75%, var(--or-fern-300) 0px, transparent 50%),
-    radial-gradient(at 92% 60%, var(--or-driftwood-200) 0px, transparent 50%),
-    radial-gradient(at 60% 100%, var(--or-fern-200) 0px, transparent 50%),
-    radial-gradient(at 25% 45%, var(--or-fern-50) 0px, transparent 50%);
+  --font-display: var(--or-font-display);
 
-  --background-image-washed-paper:
+  /* Mesh blob positions are base + drift offset, and each blob's color is
+     scaled by its group's alpha (100% at rest, 60–100% while animating). The
+     first driftwood blob keeps a fixed corner anchor at full alpha so the
+     composition stays grounded while the other layers float. */
+  --background-image-lava-lamp:
     radial-gradient(at 30% 0%, var(--or-driftwood-100) 0px, transparent 50%),
-    radial-gradient(at 90% -20%, var(--or-nectarine-200) 0px, transparent 50%),
-    radial-gradient(at 0% 95%, var(--or-nectarine-400) 200px, transparent 50%),
-    radial-gradient(at 65% 60%, var(--or-driftwood-200) 0px, transparent 50%),
-    radial-gradient(at 100% 92%, var(--or-driftwood-400) 0px, transparent 50%),
-    radial-gradient(at 25% 100%, var(--or-driftwood-200) 0px, transparent 50%),
-    radial-gradient(at 55% 25%, var(--or-driftwood-50) 0px, transparent 50%);
+    radial-gradient(
+      at calc(90% + var(--or-mesh-drift-1-x, 0%))
+        calc(-20% + var(--or-mesh-drift-1-y, 0%)),
+      color-mix(
+          in oklch,
+          var(--or-nectarine-100) var(--or-mesh-alpha-1, 100%),
+          transparent
+        )
+        0px,
+      transparent 50%
+    ),
+    radial-gradient(
+      at calc(3% + var(--or-mesh-drift-2-x, 0%))
+        calc(116% + var(--or-mesh-drift-2-y, 0%)),
+      color-mix(
+          in oklch,
+          var(--or-nectarine-300) var(--or-mesh-alpha-2, 100%),
+          transparent
+        )
+        200px,
+      transparent 50%
+    ),
+    radial-gradient(
+      at calc(65% + var(--or-mesh-drift-3-x, 0%))
+        calc(60% + var(--or-mesh-drift-3-y, 0%)),
+      color-mix(
+          in oklch,
+          var(--or-driftwood-200) var(--or-mesh-alpha-3, 100%),
+          transparent
+        )
+        0px,
+      transparent 50%
+    ),
+    radial-gradient(
+      at calc(100% + var(--or-mesh-drift-1-x, 0%))
+        calc(92% + var(--or-mesh-drift-1-y, 0%)),
+      color-mix(
+          in oklch,
+          var(--or-driftwood-300) var(--or-mesh-alpha-1, 100%),
+          transparent
+        )
+        0px,
+      transparent 50%
+    ),
+    radial-gradient(
+      at calc(25% + var(--or-mesh-drift-2-x, 0%))
+        calc(100% + var(--or-mesh-drift-2-y, 0%)),
+      color-mix(
+          in oklch,
+          var(--or-driftwood-200) var(--or-mesh-alpha-2, 100%),
+          transparent
+        )
+        0px,
+      transparent 50%
+    ),
+    radial-gradient(
+      at calc(55% + var(--or-mesh-drift-3-x, 0%))
+        calc(25% + var(--or-mesh-drift-3-y, 0%)),
+      color-mix(
+          in oklch,
+          var(--or-driftwood-50) var(--or-mesh-alpha-3, 100%),
+          transparent
+        )
+        0px,
+      transparent 50%
+    );
+
+  /* Lava-lamp float: one animation per blob group, each with its own period
+     (co-prime-ish durations so the phases never re-sync) and a negative
+     delay so they start already spread apart. Motion is y-dominant with a
+     small x sway; alpha breathes between 60% and 100%. alternate keeps every
+     loop seamless without the last keyframe having to return to 0. */
+  --animate-mesh-drift:
+    or-mesh-float-1 12s ease-in-out infinite alternate,
+    or-mesh-float-2 34s ease-in-out -10s infinite alternate,
+    or-mesh-float-3 27s ease-in-out -24s infinite alternate;
+
+  @keyframes or-mesh-float-1 {
+    0% {
+      --or-mesh-drift-1-x: 0%;
+      --or-mesh-drift-1-y: 0%;
+      --or-mesh-alpha-1: 100%;
+    }
+    35% {
+      --or-mesh-drift-1-x: 3%;
+      --or-mesh-drift-1-y: -14%;
+      --or-mesh-alpha-1: 68%;
+    }
+    65% {
+      --or-mesh-drift-1-x: -2%;
+      --or-mesh-drift-1-y: 8%;
+      --or-mesh-alpha-1: 92%;
+    }
+    100% {
+      --or-mesh-drift-1-x: 2%;
+      --or-mesh-drift-1-y: -20%;
+      --or-mesh-alpha-1: 60%;
+    }
+  }
+
+  @keyframes or-mesh-float-2 {
+    0% {
+      --or-mesh-drift-2-x: 0%;
+      --or-mesh-drift-2-y: 0%;
+      --or-mesh-alpha-2: 95%;
+    }
+    30% {
+      --or-mesh-drift-2-x: -3%;
+      --or-mesh-drift-2-y: 12%;
+      --or-mesh-alpha-2: 62%;
+    }
+    60% {
+      --or-mesh-drift-2-x: 2%;
+      --or-mesh-drift-2-y: -10%;
+      --or-mesh-alpha-2: 100%;
+    }
+    100% {
+      --or-mesh-drift-2-x: -2%;
+      --or-mesh-drift-2-y: 16%;
+      --or-mesh-alpha-2: 72%;
+    }
+  }
+
+  @keyframes or-mesh-float-3 {
+    0% {
+      --or-mesh-drift-3-x: 0%;
+      --or-mesh-drift-3-y: 0%;
+      --or-mesh-alpha-3: 85%;
+    }
+    40% {
+      --or-mesh-drift-3-x: 2%;
+      --or-mesh-drift-3-y: -16%;
+      --or-mesh-alpha-3: 100%;
+    }
+    70% {
+      --or-mesh-drift-3-x: -3%;
+      --or-mesh-drift-3-y: 10%;
+      --or-mesh-alpha-3: 64%;
+    }
+    100% {
+      --or-mesh-drift-3-x: 3%;
+      --or-mesh-drift-3-y: -12%;
+      --or-mesh-alpha-3: 78%;
+    }
+  }
 }

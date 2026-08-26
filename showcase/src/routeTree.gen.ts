@@ -10,8 +10,9 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ComponentsBubbleRouteImport } from './routes/components/bubble'
 import { Route as ComponentsButtonRouteImport } from './routes/components/button'
-import { Route as ComponentsRailRouteImport } from './routes/components/rail'
+import { Route as ComponentsNestRouteImport } from './routes/components/nest'
 import { Route as ComponentsSelectRouteImport } from './routes/components/select'
 import { Route as FoundationsColorsRouteImport } from './routes/foundations/colors'
 
@@ -20,14 +21,19 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ComponentsBubbleRoute = ComponentsBubbleRouteImport.update({
+  id: '/components/bubble',
+  path: '/components/bubble',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ComponentsButtonRoute = ComponentsButtonRouteImport.update({
   id: '/components/button',
   path: '/components/button',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ComponentsRailRoute = ComponentsRailRouteImport.update({
-  id: '/components/rail',
-  path: '/components/rail',
+const ComponentsNestRoute = ComponentsNestRouteImport.update({
+  id: '/components/nest',
+  path: '/components/nest',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ComponentsSelectRoute = ComponentsSelectRouteImport.update({
@@ -43,23 +49,26 @@ const FoundationsColorsRoute = FoundationsColorsRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/components/bubble': typeof ComponentsBubbleRoute
   '/components/button': typeof ComponentsButtonRoute
-  '/components/rail': typeof ComponentsRailRoute
+  '/components/nest': typeof ComponentsNestRoute
   '/components/select': typeof ComponentsSelectRoute
   '/foundations/colors': typeof FoundationsColorsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/components/bubble': typeof ComponentsBubbleRoute
   '/components/button': typeof ComponentsButtonRoute
-  '/components/rail': typeof ComponentsRailRoute
+  '/components/nest': typeof ComponentsNestRoute
   '/components/select': typeof ComponentsSelectRoute
   '/foundations/colors': typeof FoundationsColorsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/components/bubble': typeof ComponentsBubbleRoute
   '/components/button': typeof ComponentsButtonRoute
-  '/components/rail': typeof ComponentsRailRoute
+  '/components/nest': typeof ComponentsNestRoute
   '/components/select': typeof ComponentsSelectRoute
   '/foundations/colors': typeof FoundationsColorsRoute
 }
@@ -67,30 +76,34 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/components/bubble'
     | '/components/button'
-    | '/components/rail'
+    | '/components/nest'
     | '/components/select'
     | '/foundations/colors'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/components/bubble'
     | '/components/button'
-    | '/components/rail'
+    | '/components/nest'
     | '/components/select'
     | '/foundations/colors'
   id:
     | '__root__'
     | '/'
+    | '/components/bubble'
     | '/components/button'
-    | '/components/rail'
+    | '/components/nest'
     | '/components/select'
     | '/foundations/colors'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ComponentsBubbleRoute: typeof ComponentsBubbleRoute
   ComponentsButtonRoute: typeof ComponentsButtonRoute
-  ComponentsRailRoute: typeof ComponentsRailRoute
+  ComponentsNestRoute: typeof ComponentsNestRoute
   ComponentsSelectRoute: typeof ComponentsSelectRoute
   FoundationsColorsRoute: typeof FoundationsColorsRoute
 }
@@ -104,6 +117,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/components/bubble': {
+      id: '/components/bubble'
+      path: '/components/bubble'
+      fullPath: '/components/bubble'
+      preLoaderRoute: typeof ComponentsBubbleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/components/button': {
       id: '/components/button'
       path: '/components/button'
@@ -111,11 +131,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ComponentsButtonRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/components/rail': {
-      id: '/components/rail'
-      path: '/components/rail'
-      fullPath: '/components/rail'
-      preLoaderRoute: typeof ComponentsRailRouteImport
+    '/components/nest': {
+      id: '/components/nest'
+      path: '/components/nest'
+      fullPath: '/components/nest'
+      preLoaderRoute: typeof ComponentsNestRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/components/select': {
@@ -137,8 +157,9 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ComponentsBubbleRoute: ComponentsBubbleRoute,
   ComponentsButtonRoute: ComponentsButtonRoute,
-  ComponentsRailRoute: ComponentsRailRoute,
+  ComponentsNestRoute: ComponentsNestRoute,
   ComponentsSelectRoute: ComponentsSelectRoute,
   FoundationsColorsRoute: FoundationsColorsRoute,
 }

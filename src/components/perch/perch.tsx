@@ -1,6 +1,6 @@
-import type { ComponentProps } from "react";
+import type { ComponentProps } from "react"
 
-import { cn } from "../../lib/utils.js";
+import { cn } from "../../lib/utils.js"
 
 /**
  * Perch — the singular floating surface. Sits above the Canvas the way an
@@ -17,7 +17,7 @@ function Perch({ className, ...props }: ComponentProps<"div">) {
       )}
       {...props}
     />
-  );
+  )
 }
 
-export { Perch };
+export { Perch }

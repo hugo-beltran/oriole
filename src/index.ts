@@ -1,4 +1,10 @@
 export {
+  Beak,
+  type BeakItem,
+  type BeakModel,
+  type BeakProps,
+} from "./components/beak/index.js"
+export {
   Bubble,
   type BubbleProps,
   bubbleVariants,

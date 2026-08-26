@@ -10,6 +10,9 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ComponentsRouteRouteImport } from './routes/components/route'
+import { Route as FoundationsRouteRouteImport } from './routes/foundations/route'
+import { Route as ComponentsBeakRouteImport } from './routes/components/beak'
 import { Route as ComponentsBubbleRouteImport } from './routes/components/bubble'
 import { Route as ComponentsButtonRouteImport } from './routes/components/button'
 import { Route as ComponentsNestRouteImport } from './routes/components/nest'
@@ -21,34 +24,52 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ComponentsBubbleRoute = ComponentsBubbleRouteImport.update({
-  id: '/components/bubble',
-  path: '/components/bubble',
+const ComponentsRouteRoute = ComponentsRouteRouteImport.update({
+  id: '/components',
+  path: '/components',
   getParentRoute: () => rootRouteImport,
+} as any)
+const FoundationsRouteRoute = FoundationsRouteRouteImport.update({
+  id: '/foundations',
+  path: '/foundations',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ComponentsBeakRoute = ComponentsBeakRouteImport.update({
+  id: '/beak',
+  path: '/beak',
+  getParentRoute: () => ComponentsRouteRoute,
+} as any)
+const ComponentsBubbleRoute = ComponentsBubbleRouteImport.update({
+  id: '/bubble',
+  path: '/bubble',
+  getParentRoute: () => ComponentsRouteRoute,
 } as any)
 const ComponentsButtonRoute = ComponentsButtonRouteImport.update({
-  id: '/components/button',
-  path: '/components/button',
-  getParentRoute: () => rootRouteImport,
+  id: '/button',
+  path: '/button',
+  getParentRoute: () => ComponentsRouteRoute,
 } as any)
 const ComponentsNestRoute = ComponentsNestRouteImport.update({
-  id: '/components/nest',
-  path: '/components/nest',
-  getParentRoute: () => rootRouteImport,
+  id: '/nest',
+  path: '/nest',
+  getParentRoute: () => ComponentsRouteRoute,
 } as any)
 const ComponentsSelectRoute = ComponentsSelectRouteImport.update({
-  id: '/components/select',
-  path: '/components/select',
-  getParentRoute: () => rootRouteImport,
+  id: '/select',
+  path: '/select',
+  getParentRoute: () => ComponentsRouteRoute,
 } as any)
 const FoundationsColorsRoute = FoundationsColorsRouteImport.update({
-  id: '/foundations/colors',
-  path: '/foundations/colors',
-  getParentRoute: () => rootRouteImport,
+  id: '/colors',
+  path: '/colors',
+  getParentRoute: () => FoundationsRouteRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/components': typeof ComponentsRouteRouteWithChildren
+  '/foundations': typeof FoundationsRouteRouteWithChildren
+  '/components/beak': typeof ComponentsBeakRoute
   '/components/bubble': typeof ComponentsBubbleRoute
   '/components/button': typeof ComponentsButtonRoute
   '/components/nest': typeof ComponentsNestRoute
@@ -57,6 +78,9 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/components': typeof ComponentsRouteRouteWithChildren
+  '/foundations': typeof FoundationsRouteRouteWithChildren
+  '/components/beak': typeof ComponentsBeakRoute
   '/components/bubble': typeof ComponentsBubbleRoute
   '/components/button': typeof ComponentsButtonRoute
   '/components/nest': typeof ComponentsNestRoute
@@ -66,6 +90,9 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/components': typeof ComponentsRouteRouteWithChildren
+  '/foundations': typeof FoundationsRouteRouteWithChildren
+  '/components/beak': typeof ComponentsBeakRoute
   '/components/bubble': typeof ComponentsBubbleRoute
   '/components/button': typeof ComponentsButtonRoute
   '/components/nest': typeof ComponentsNestRoute
@@ -76,6 +103,9 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/components'
+    | '/foundations'
+    | '/components/beak'
     | '/components/bubble'
     | '/components/button'
     | '/components/nest'
@@ -84,6 +114,9 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/components'
+    | '/foundations'
+    | '/components/beak'
     | '/components/bubble'
     | '/components/button'
     | '/components/nest'
@@ -92,6 +125,9 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/components'
+    | '/foundations'
+    | '/components/beak'
     | '/components/bubble'
     | '/components/button'
     | '/components/nest'
@@ -101,11 +137,8 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  ComponentsBubbleRoute: typeof ComponentsBubbleRoute
-  ComponentsButtonRoute: typeof ComponentsButtonRoute
-  ComponentsNestRoute: typeof ComponentsNestRoute
-  ComponentsSelectRoute: typeof ComponentsSelectRoute
-  FoundationsColorsRoute: typeof FoundationsColorsRoute
+  ComponentsRouteRoute: typeof ComponentsRouteRouteWithChildren
+  FoundationsRouteRoute: typeof FoundationsRouteRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -117,51 +150,100 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/components': {
+      id: '/components'
+      path: '/components'
+      fullPath: '/components'
+      preLoaderRoute: typeof ComponentsRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/foundations': {
+      id: '/foundations'
+      path: '/foundations'
+      fullPath: '/foundations'
+      preLoaderRoute: typeof FoundationsRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/components/beak': {
+      id: '/components/beak'
+      path: '/beak'
+      fullPath: '/components/beak'
+      preLoaderRoute: typeof ComponentsBeakRouteImport
+      parentRoute: typeof ComponentsRouteRoute
+    }
     '/components/bubble': {
       id: '/components/bubble'
-      path: '/components/bubble'
+      path: '/bubble'
       fullPath: '/components/bubble'
       preLoaderRoute: typeof ComponentsBubbleRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof ComponentsRouteRoute
     }
     '/components/button': {
       id: '/components/button'
-      path: '/components/button'
+      path: '/button'
       fullPath: '/components/button'
       preLoaderRoute: typeof ComponentsButtonRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof ComponentsRouteRoute
     }
     '/components/nest': {
       id: '/components/nest'
-      path: '/components/nest'
+      path: '/nest'
       fullPath: '/components/nest'
       preLoaderRoute: typeof ComponentsNestRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof ComponentsRouteRoute
     }
     '/components/select': {
       id: '/components/select'
-      path: '/components/select'
+      path: '/select'
       fullPath: '/components/select'
       preLoaderRoute: typeof ComponentsSelectRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof ComponentsRouteRoute
     }
     '/foundations/colors': {
       id: '/foundations/colors'
-      path: '/foundations/colors'
+      path: '/colors'
       fullPath: '/foundations/colors'
       preLoaderRoute: typeof FoundationsColorsRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof FoundationsRouteRoute
     }
   }
 }
 
-const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+interface ComponentsRouteRouteChildren {
+  ComponentsBeakRoute: typeof ComponentsBeakRoute
+  ComponentsBubbleRoute: typeof ComponentsBubbleRoute
+  ComponentsButtonRoute: typeof ComponentsButtonRoute
+  ComponentsNestRoute: typeof ComponentsNestRoute
+  ComponentsSelectRoute: typeof ComponentsSelectRoute
+}
+
+const ComponentsRouteRouteChildren: ComponentsRouteRouteChildren = {
+  ComponentsBeakRoute: ComponentsBeakRoute,
   ComponentsBubbleRoute: ComponentsBubbleRoute,
   ComponentsButtonRoute: ComponentsButtonRoute,
   ComponentsNestRoute: ComponentsNestRoute,
   ComponentsSelectRoute: ComponentsSelectRoute,
+}
+
+const ComponentsRouteRouteWithChildren = ComponentsRouteRoute._addFileChildren(
+  ComponentsRouteRouteChildren,
+)
+
+interface FoundationsRouteRouteChildren {
+  FoundationsColorsRoute: typeof FoundationsColorsRoute
+}
+
+const FoundationsRouteRouteChildren: FoundationsRouteRouteChildren = {
   FoundationsColorsRoute: FoundationsColorsRoute,
+}
+
+const FoundationsRouteRouteWithChildren =
+  FoundationsRouteRoute._addFileChildren(FoundationsRouteRouteChildren)
+
+const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
+  ComponentsRouteRoute: ComponentsRouteRouteWithChildren,
+  FoundationsRouteRoute: FoundationsRouteRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

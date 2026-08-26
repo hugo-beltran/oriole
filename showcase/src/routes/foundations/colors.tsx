@@ -1,3 +1,4 @@
+import { cn } from "@mycodemedia/oriole"
 import { createFileRoute } from "@tanstack/react-router"
 import { useState } from "react"
 import { Page } from "../../lib/example"
@@ -6,28 +7,115 @@ export const Route = createFileRoute("/foundations/colors")({
   component: ColorsPage,
 })
 
-// Literal class names so Tailwind's scanner picks them up. Values are read
-// from the live stylesheet so this page can never drift from theme.css.
-const steps = [
-  { step: "50", swatch: "bg-nectarine-50" },
-  { step: "100", swatch: "bg-nectarine-100" },
-  { step: "200", swatch: "bg-nectarine-200" },
-  { step: "300", swatch: "bg-nectarine-300" },
-  { step: "400", swatch: "bg-nectarine-400", brand: true },
-  { step: "500", swatch: "bg-nectarine-500" },
-  { step: "600", swatch: "bg-nectarine-600" },
-  { step: "700", swatch: "bg-nectarine-700" },
-  { step: "800", swatch: "bg-nectarine-800" },
-  { step: "900", swatch: "bg-nectarine-900" },
-  { step: "950", swatch: "bg-nectarine-950" },
+const STEPS = [
+  "50",
+  "100",
+  "200",
+  "300",
+  "400",
+  "500",
+  "600",
+  "700",
+  "800",
+  "900",
+  "950",
+] as const
+
+type Ramp = {
+  name: string
+  note: string
+  /** Step carrying a semantic role, flagged under its swatch. */
+  marked?: { step: string; tag: string }
+  /** Literal class per step so Tailwind's scanner picks them up. */
+  swatches: Record<string, string>
+}
+
+const ramps: Ramp[] = [
+  {
+    name: "nectarine",
+    note: "The brand ramp, seeded from vivid orange references.",
+    marked: { step: "400", tag: "brand" },
+    swatches: {
+      "50": "bg-nectarine-50",
+      "100": "bg-nectarine-100",
+      "200": "bg-nectarine-200",
+      "300": "bg-nectarine-300",
+      "400": "bg-nectarine-400",
+      "500": "bg-nectarine-500",
+      "600": "bg-nectarine-600",
+      "700": "bg-nectarine-700",
+      "800": "bg-nectarine-800",
+      "900": "bg-nectarine-900",
+      "950": "bg-nectarine-950",
+    },
+  },
+  {
+    name: "fern",
+    note: "Nectarine's mirror: fresh green tints, shades sweeping green → teal → petrol.",
+    swatches: {
+      "50": "bg-fern-50",
+      "100": "bg-fern-100",
+      "200": "bg-fern-200",
+      "300": "bg-fern-300",
+      "400": "bg-fern-400",
+      "500": "bg-fern-500",
+      "600": "bg-fern-600",
+      "700": "bg-fern-700",
+      "800": "bg-fern-800",
+      "900": "bg-fern-900",
+      "950": "bg-fern-950",
+    },
+  },
+  {
+    name: "driftwood",
+    note: "The muted neutral for borders, muted text, and quiet surfaces; warmth accumulates toward the dark end.",
+    swatches: {
+      "50": "bg-driftwood-50",
+      "100": "bg-driftwood-100",
+      "200": "bg-driftwood-200",
+      "300": "bg-driftwood-300",
+      "400": "bg-driftwood-400",
+      "500": "bg-driftwood-500",
+      "600": "bg-driftwood-600",
+      "700": "bg-driftwood-700",
+      "800": "bg-driftwood-800",
+      "900": "bg-driftwood-900",
+      "950": "bg-driftwood-950",
+    },
+  },
+  {
+    name: "plum",
+    note: "The accent, dialed back into fern's register so the purple reads structural rather than emphatic.",
+    marked: { step: "600", tag: "primary" },
+    swatches: {
+      "50": "bg-plum-50",
+      "100": "bg-plum-100",
+      "200": "bg-plum-200",
+      "300": "bg-plum-300",
+      "400": "bg-plum-400",
+      "500": "bg-plum-500",
+      "600": "bg-plum-600",
+      "700": "bg-plum-700",
+      "800": "bg-plum-800",
+      "900": "bg-plum-900",
+      "950": "bg-plum-950",
+    },
+  },
 ]
 
+// Values are read from the live stylesheet so this page can never drift
+// from theme.css.
 function readTokenValues() {
   const style = getComputedStyle(document.documentElement)
   return Object.fromEntries(
-    steps.map((s) => [
-      s.step,
-      style.getPropertyValue(`--or-nectarine-${s.step}`).trim(),
+    ramps.map((ramp) => [
+      ramp.name,
+      Object.fromEntries(
+        STEPS.map((step) => [
+          step,
+          style.getPropertyValue(`--or-${ramp.name}-${step}`).trim(),
+        ]),
+      ),
     ]),
   )
 }
@@ -38,42 +126,58 @@ function ColorsPage() {
   return (
     <Page
       title="Colors"
-      description="The nectarine brand ramp. The brand color sits at 400; primary maps to nectarine-400 and the light-mode focus ring to nectarine-600. Override any --or-nectarine-* variable to re-brand."
+      description="The four Oriole ramps — nectarine (brand), fern, driftwood (neutral), and plum (accent). Hover a swatch for its oklch value. Override any --or-* variable to re-brand."
     >
-      <section aria-label="Nectarine color ramp">
-        <ul className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-          {steps.map((color) => (
-            <li key={color.step}>
-              <div
-                className={`h-20 rounded-lg border border-border ${color.swatch}`}
-              />
-              <div className="mt-2 flex items-baseline justify-between">
-                <span className="text-sm font-medium">
-                  nectarine-{color.step}
+      {/* one block so the ramps sit close together despite Page's space-y-12 */}
+      <div className="space-y-5">
+        {ramps.map((ramp) => (
+          <section key={ramp.name} aria-label={`${ramp.name} color ramp`}>
+            <div className="flex flex-wrap items-baseline gap-x-2">
+              <h2 className="text-sm font-semibold">{ramp.name}</h2>
+              {ramp.marked ? (
+                <span className="self-center rounded-full bg-muted px-1.5 py-px text-[10px] font-medium tabular-nums text-foreground/70">
+                  {ramp.marked.step} · {ramp.marked.tag}
                 </span>
-                {color.brand ? (
-                  <span className="rounded-full bg-nectarine-100 px-2 py-0.5 text-xs font-medium text-nectarine-950">
-                    brand
-                  </span>
-                ) : null}
-              </div>
-              <p className="mt-0.5 font-mono text-xs text-muted-foreground">
-                {values[color.step]}
-              </p>
-            </li>
-          ))}
-        </ul>
-      </section>
+              ) : null}
+              <p className="text-xs text-muted-foreground">{ramp.note}</p>
+            </div>
+            <ul className="mt-2 grid grid-cols-11 gap-1">
+              {STEPS.map((step) => (
+                <li key={step} className="min-w-0">
+                  <div
+                    title={`${ramp.name}-${step} · ${values[ramp.name]?.[step] ?? ""}`}
+                    className={cn(
+                      "h-9 rounded-md border border-border",
+                      ramp.swatches[step],
+                      ramp.marked?.step === step &&
+                        "ring-2 ring-ring ring-offset-1 ring-offset-background",
+                    )}
+                  />
+                  <p
+                    className={cn(
+                      "mt-1 text-center text-[10px] tabular-nums text-muted-foreground",
+                      ramp.marked?.step === step &&
+                        "font-medium text-foreground",
+                    )}
+                  >
+                    {step}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))}
+      </div>
 
       <section aria-label="Usage">
         <h2 className="text-lg font-semibold">Usage</h2>
         <p className="mt-2 text-sm text-muted-foreground">
           Components should keep using semantic tokens (
           <code className="font-mono text-xs">bg-primary</code>,{" "}
-          <code className="font-mono text-xs">ring-ring</code>) — the ramp is
+          <code className="font-mono text-xs">ring-ring</code>) — the ramps are
           for consumers who need explicit shades, e.g.{" "}
-          <code className="font-mono text-xs">bg-nectarine-100</code> for a
-          tinted surface or{" "}
+          <code className="font-mono text-xs">bg-fern-100</code> for a tinted
+          surface or{" "}
           <code className="font-mono text-xs">text-nectarine-700</code> for
           accessible accent text on light backgrounds.
         </p>

@@ -1,10 +1,16 @@
 import {
   Add01Icon,
+  Attachment01Icon,
+  ChartLineData01Icon,
+  GlobalSearchIcon,
   Home01Icon,
   UserAdd01Icon,
+  UserGroupIcon,
 } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
 import {
+  Beak,
+  type BeakItem,
   Bubble,
   cn,
   Nest,
@@ -721,6 +727,34 @@ const conversations: [Conversation, ...Conversation[]] = [
 const cannedReply =
   "Got it — this is a canned reply. Wire up real responses in the app, not here."
 
+/* Composer fixtures — the research platforms the demo cites, plus a small
+ * command palette and model roster. All demo-only. */
+const commands: BeakItem[] = [
+  {
+    id: "forecast",
+    label: "forecast",
+    description: "Project demand for a segment",
+  },
+  { id: "compare", label: "compare", description: "Two segments side by side" },
+  { id: "whitespace", label: "whitespace", description: "Score category gaps" },
+  {
+    id: "summarize",
+    label: "summarize",
+    description: "Digest the thread so far",
+  },
+]
+
+const models = [
+  { id: "oriole-2", label: "Oriole 2", tag: "Flagship" },
+  { id: "finch-mini", label: "Finch Mini", tag: "Fast" },
+  { id: "owl-1", label: "Owl 1", tag: "Legacy" },
+]
+
+const demoFiles = ["loyalty-export.csv", "shelf-photo.png", "channel-brief.pdf"]
+
+const demoTranscript =
+  "Which snack segments are trending with Gen Z this quarter"
+
 /* slot: Chip component */
 function ConfidenceChip({ value }: { value: number }) {
   return (
@@ -796,7 +830,7 @@ function ChatDemo() {
     ),
   )
   const messages = threads[active.id] ?? active.messages
-  const [draft, setDraft] = useState("")
+  const [attachments, setAttachments] = useState<string[]>([])
   const nextId = useRef(100)
   const threadRef = useRef<HTMLDivElement>(null)
 
@@ -806,18 +840,52 @@ function ChatDemo() {
     }
   }, [messages.length])
 
-  function send() {
-    const text = draft.trim()
-    if (!text) return
+  const sources: BeakItem[] = [
+    {
+      id: "attach",
+      label: "Add photos & files",
+      description: "Upload from your computer",
+      icon: <HugeiconsIcon icon={Attachment01Icon} size={15} />,
+      onSelect: () =>
+        setAttachments((current) => [
+          ...current,
+          demoFiles[current.length % demoFiles.length] ?? "attachment.pdf",
+        ]),
+    },
+    {
+      id: "loyalty",
+      label: "Loyalty panel",
+      description: "Household purchase data",
+      icon: <HugeiconsIcon icon={ChartLineData01Icon} size={15} />,
+    },
+    {
+      id: "social",
+      label: "Social listening",
+      description: "Trend & mention velocity",
+      icon: <HugeiconsIcon icon={UserGroupIcon} size={15} />,
+    },
+    {
+      id: "web",
+      label: "Web search",
+      description: "Real-time news and info",
+      icon: <HugeiconsIcon icon={GlobalSearchIcon} size={15} />,
+    },
+  ]
+
+  function send(text: string) {
+    const body =
+      text ||
+      (attachments.length > 0 ? `Attached: ${attachments.join(", ")}` : "")
+    if (!body) return
     setThreads((prev) => ({
       ...prev,
       [active.id]: [
         ...(prev[active.id] ?? active.messages),
-        { id: nextId.current++, role: "user", text },
+        { id: nextId.current++, role: "user", text: body },
         { id: nextId.current++, role: "assistant", text: cannedReply },
       ],
     }))
-    setDraft("")
+    setAttachments([])
   }
 
   return (
@@ -894,38 +962,28 @@ function ChatDemo() {
               </ul>
             </div>
 
-            <footer className="border-t border-border p-4">
-              <form
-                className="mx-auto flex max-w-2xl items-end gap-2"
-                onSubmit={(event) => {
-                  event.preventDefault()
-                  send()
-                }}
-              >
-                {/* slot: TextField / TextArea */}
-                <textarea
-                  aria-label="Message"
-                  rows={1}
-                  value={draft}
-                  onChange={(event) => setDraft(event.target.value)}
-                  onKeyDown={(event) => {
-                    if (event.key === "Enter" && !event.shiftKey) {
-                      event.preventDefault()
-                      send()
-                    }
-                  }}
-                  placeholder="Message the assistant…"
-                  className="min-h-10 flex-1 resize-none rounded-md border border-input bg-background px-3 py-2 text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                />
-                {/* slot: Button */}
-                <button
-                  type="submit"
-                  className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90 disabled:opacity-50"
-                  disabled={!draft.trim()}
-                >
-                  Send
-                </button>
-              </form>
+            {/* gutters mirror the thread's (ps-12 pe-6 + max-w-4xl) so the
+                composer's edges line up with the bubbles above */}
+            <footer className="ps-12 pe-6 pt-2 pb-4">
+              <Beak
+                className="mx-auto max-w-4xl"
+                placeholder="Message the assistant…"
+                sources={sources}
+                commands={commands}
+                models={models}
+                attachments={attachments}
+                onAttachmentRemove={(index) =>
+                  setAttachments((current) =>
+                    current.filter((_, i) => i !== index),
+                  )
+                }
+                onDictate={() =>
+                  new Promise((resolve) =>
+                    setTimeout(() => resolve(demoTranscript), 1800),
+                  )
+                }
+                onSend={send}
+              />
             </footer>
           </div>
         </Perch>

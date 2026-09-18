@@ -137,6 +137,10 @@ function Beak({
   const [engaged, setEngaged] = useState(false)
   const [listening, setListening] = useState(false)
   const [expanded, setExpanded] = useState(false)
+  /* Bumped whenever the controls row resizes, so the inline/expanded
+   * measurement reruns — layout isn't settled on first mount, and the
+   * container can resize later (window, collapsing sidebars). */
+  const [resizeTick, setResizeTick] = useState(0)
   const [rowBox, setRowBox] = useState<{ top: number; height: number } | null>(
     null,
   )
@@ -220,6 +224,7 @@ function Beak({
   }, [modelOpen])
 
   /* Move wrapped text onto its own row, then grow to a compact maximum. */
+  // biome-ignore lint/correctness/useExhaustiveDependencies: resizeTick isn't read — it re-triggers the measurement when the row resizes
   useLayoutEffect(() => {
     const input = inputRef.current
     const controls = controlsRef.current
@@ -246,7 +251,15 @@ function Beak({
     const contentHeight = input.scrollHeight
     input.style.height = `${Math.min(Math.max(contentHeight, minHeight), maxHeight)}px`
     input.style.overflowY = contentHeight > maxHeight ? "auto" : "hidden"
-  }, [draft, expanded, model, onDictate])
+  }, [draft, expanded, model, onDictate, resizeTick])
+
+  useEffect(() => {
+    const controls = controlsRef.current
+    if (!controls || typeof ResizeObserver === "undefined") return
+    const observer = new ResizeObserver(() => setResizeTick((t) => t + 1))
+    observer.observe(controls)
+    return () => observer.disconnect()
+  }, [])
 
   /* Clicking anywhere outside the composer closes the open menus. */
   useEffect(() => {

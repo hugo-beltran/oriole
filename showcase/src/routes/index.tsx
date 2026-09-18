@@ -73,7 +73,7 @@ const conversations: [Conversation, ...Conversation[]] = [
       {
         id: 2,
         role: "assistant",
-        text: "Your current buyers skew 30–45, and the loyalty card data says that skew has hardened over the last six quarters. Two under-served groups stand out. First, 55+ “afternoon tea” households: they drive 12% of category spend, repurchase on a tight 11-day cycle, and index heavily toward shortbread and oat textures you already produce — yet they barely register in your share. Second, 18–24 students, where single-serve formats over-index 2.3× against your multipack-only lineup and vending/campus channels account for a third of their category purchases.",
+        text: "Your current buyers skew 30–45, and the loyalty card data says that skew has hardened over the last six quarters. Two under-served groups stand out:\n\n- **55+ “afternoon tea” households** — drive 12% of category spend, repurchase on a tight 11-day cycle, and index heavily toward shortbread and oat textures you already produce, yet barely register in your share.\n- **18–24 students** — single-serve formats over-index 2.3× against your multipack-only lineup, and vending/campus channels account for a third of their category purchases.",
         sources: [
           {
             label: "Loyalty panel · cookie category Q2",
@@ -93,7 +93,7 @@ const conversations: [Conversation, ...Conversation[]] = [
       {
         id: 4,
         role: "assistant",
-        text: "Two windows are unexploited. The bigger one is a back-to-school lunchbox surge across August–September: category units rise 18% while your share actually dips, because the winners are portioned multipacks with individually wrapped units. The second is a spring picnic bump in April–May tied to outdoor occasions, where “sharing formats” language on pack drives most of the incremental lift. A parent-aimed lunchbox multipack forecasts a 9–14% unit lift across the first window.",
+        text: "Two windows are unexploited:\n\n| Window | Months | Signal |\n| --- | --- | --- |\n| Back-to-school | Aug–Sep | Category units **+18%** while your share dips |\n| Picnic bump | Apr–May | “Sharing formats” pack language drives the lift |\n\nThe winners in the first window are portioned multipacks with individually wrapped units. A parent-aimed lunchbox multipack forecasts a **9–14% unit lift** across it.",
         confidence: 82,
         sources: [
           {
@@ -133,7 +133,7 @@ const conversations: [Conversation, ...Conversation[]] = [
       {
         id: 2,
         role: "assistant",
-        text: "Oat dominates 41% of new launches and the shelf is saturated at every price tier, so the openings are structural rather than flavor-led. The clearest one: barista-grade pea-protein blends are nearly empty at mainstream price points — only two national SKUs, both premium at $5.99+. There's a secondary gap in shelf-stable multipacks for office and food-service channels, where almond incumbents have been delisting on margin pressure for three straight quarters.",
+        text: "Oat dominates **41% of new launches** and the shelf is saturated at every price tier, so the openings are structural rather than flavor-led:\n\n1. **Barista-grade pea-protein blends** — nearly empty at mainstream price points; only two national SKUs, both premium at $5.99+.\n2. **Shelf-stable multipacks** for office and food-service channels, where almond incumbents have been delisting on margin pressure for three straight quarters.",
         sources: [
           {
             label: "Launch tracker · plant milk 2026",
@@ -153,7 +153,7 @@ const conversations: [Conversation, ...Conversation[]] = [
       {
         id: 4,
         role: "assistant",
-        text: "It reads under-supplied, not unwanted. Search demand for “pea milk coffee” grew 3.1× year over year while shelf supply stayed flat, café operators cite frothing performance as the unmet need, and the two premium incumbents both report supply-constrained velocity rather than weak pull. The niche forecasts to $120M retail within two years, with most of the risk concentrated in taste perception — pea protein still carries a flavor penalty in blind panels.",
+        text: "It reads under-supplied, not unwanted. Search demand for “pea milk coffee” grew **3.1×** year over year while shelf supply stayed flat, and the two premium incumbents both report supply-constrained velocity rather than weak pull. From the operator interviews:\n\n> Frothing performance is the unmet need — nothing at a mainstream price point steams like dairy.\n\nThe niche forecasts to **$120M retail** within two years, with most of the risk concentrated in taste perception — pea protein still carries a flavor penalty in blind panels.",
         confidence: 68,
         sources: [
           {
@@ -285,7 +285,7 @@ const conversations: [Conversation, ...Conversation[]] = [
       {
         id: 12,
         role: "assistant",
-        text: "Three are building. Pickle-adjacent sour is the loudest on social but shows the classic spike-and-fade signature, so I'd treat it as a limited-drop play only. Ube and pandan are quieter but compounding steadily quarter over quarter, riding broader Filipino and Southeast Asian food content. Brown-butter “baked nostalgia” profiles are early yet showing unusually strong cross-generation appeal. Ube forecasts to be the strongest durable grower of the three.",
+        text: "Three are building:\n\n- **Pickle-adjacent sour** — loudest on social but shows the classic spike-and-fade signature, so treat it as a ~~durable bet~~ limited-drop play only.\n- **Ube and pandan** — quieter but compounding steadily quarter over quarter, riding broader Filipino and Southeast Asian food content.\n- **Brown-butter “baked nostalgia”** — early, yet showing unusually strong cross-generation appeal.\n\nUbe forecasts to be the strongest durable grower of the three.",
         confidence: 66,
         sources: [
           {
@@ -339,7 +339,7 @@ const conversations: [Conversation, ...Conversation[]] = [
       {
         id: 18,
         role: "assistant",
-        text: "Twelve weeks, two flavors (hot-honey original and a chili-mango limited), 800 convenience doors across two regions plus a social checkout storefront. Success gates: 25%+ repeat by week eight, social mention velocity above the swicy category median, and no more than 10% cannibalization of your existing jerky line. Creative brief leans on the drop calendar, not the brand block.",
+        text: "### Pilot design\n\nTwelve weeks, two flavors (hot-honey original and a chili-mango limited), 800 convenience doors across two regions plus a social checkout storefront.\n\n### Success gates\n\n- [ ] 25%+ repeat by week eight\n- [ ] Social mention velocity above the swicy category median\n- [ ] No more than 10% cannibalization of the existing jerky line\n\nCreative brief leans on the drop calendar, not the brand block.",
       },
       {
         id: 19,
@@ -365,7 +365,7 @@ const conversations: [Conversation, ...Conversation[]] = [
       {
         id: 2,
         role: "assistant",
-        text: "The Southeast leads with a projected 11% unit lift, driven by longer heatwave windows in the seasonal outlook and the convenience distribution you added last fall. The Southwest follows at 6% with strength concentrated in multipacks. The Midwest runs at 3% — normal growth, nothing structural — and the Northwest stays flat against last year, where category softness offsets your gains in natural channel doors.",
+        text: "Projected unit lift by region for the summer window:\n\n| Region | Lift | Driver |\n| --- | ---: | --- |\n| Southeast | **+11%** | Heatwave windows + new convenience doors |\n| Southwest | +6% | Multipack strength |\n| Midwest | +3% | Normal growth, nothing structural |\n| Northwest | flat | Category softness offsets natural-channel gains |",
         confidence: 87,
         sources: [
           {
@@ -518,7 +518,7 @@ const conversations: [Conversation, ...Conversation[]] = [
       {
         id: 20,
         role: "assistant",
-        text: "Headline: Southeast-led summer, 11% regional lift with a protected 4% floor. Actions: reserve the co-packer July slots before May 15, build single-serve to five weeks of supply in Southeast DCs by June, lean displays into sugar-free where velocity supports it, and hold the allocation ranking with the convenience banners on top. Risks: seasonal outlook variance (widest swing), co-packer slot competition, and two competitive launches with modeled impact under 1%.",
+        text: "**Headline:** Southeast-led summer — 11% regional lift with a protected 4% floor.\n\n---\n\n**Actions**\n\n1. Reserve the co-packer July slots before May 15\n2. Build single-serve to five weeks of supply in Southeast DCs by June\n3. Lean displays into sugar-free where velocity supports it\n4. Hold the allocation ranking with the convenience banners on top\n\n**Risks:** seasonal outlook variance (widest swing), co-packer slot competition, and two competitive launches with modeled impact under 1%.",
         sources: [
           {
             label: "One-page forecast summary",
@@ -540,7 +540,7 @@ const conversations: [Conversation, ...Conversation[]] = [
       {
         id: 2,
         role: "assistant",
-        text: "Premium is crowded — eleven brands stacked between $6.99 and $8.49 with almost no velocity separation — but the $4.50–$5.50 mid-tier has thinned out: three brands exited it this year, two by trading up their packaging and one by leaving the category outright. Shelf data shows the vacated facings went mostly to private label, which under-delivers on the texture attributes that drive repeat in this aisle.",
+        text: "- **Premium is crowded** — eleven brands stacked between $6.99 and $8.49 with almost no velocity separation.\n- **The $4.50–$5.50 mid-tier has thinned out** — three brands exited it this year:\n  - two by trading up their packaging\n  - one by leaving the category outright\n\nShelf data shows the vacated facings went mostly to private label, which *under-delivers on the texture attributes that drive repeat* in this aisle.",
         sources: [
           {
             label: "Shelf price ladder · granola",
@@ -560,7 +560,7 @@ const conversations: [Conversation, ...Conversation[]] = [
       {
         id: 4,
         role: "assistant",
-        text: "Yes — repositioning at $5.29 forecasts a 6–9% volume gain, with margin held by the new co-packer rates you locked in March. The gain concentrates in households currently splitting between premium-on-promo and private label; at $5.29 you become their everyday answer rather than their compromise. The model assumes no pack change, which keeps the transition cost to a label revision.",
+        text: "Yes — repositioning at **$5.29** forecasts a **6–9% volume gain**, with margin held by the new co-packer rates you locked in March. The gain concentrates in households currently splitting between premium-on-promo and private label; at $5.29 you become their everyday answer rather than their compromise. The model assumes *no pack change*, which keeps the transition cost to a label revision.",
         confidence: 77,
         sources: [
           {
@@ -599,7 +599,7 @@ const conversations: [Conversation, ...Conversation[]] = [
       {
         id: 2,
         role: "assistant",
-        text: "Three signals dominate. First, run clubs as third places: group runs are absorbing the social role dating apps and bars are losing — MarketLogic's panel has 28% of 18–27s attending a group fitness event monthly, and Nichefire shows “run club” velocity up 4.2× year over year. Second, soft fitness: anti-optimization language (zone 2, “hot girl walks,” rest-day content) is displacing grind culture in social conversation. Third, fitness as documentation: workouts increasingly exist to be posted, with map screenshots and route art functioning as social proof. For Strava, run clubs rank first — they land directly on your social graph — documentation second, soft fitness third.",
+        text: "Three signals dominate:\n\n1. **Run clubs as third places** — group runs are absorbing the social role dating apps and bars are losing. MarketLogic's panel has 28% of 18–27s attending a group fitness event monthly, and Nichefire shows “run club” velocity up 4.2× year over year.\n2. **Soft fitness** — anti-optimization language (*zone 2*, *“hot girl walks”*, rest-day content) is displacing grind culture in social conversation.\n3. **Fitness as documentation** — workouts increasingly exist to be posted, with map screenshots and route art functioning as social proof.\n\nFor Strava, run clubs rank first — they land directly on your social graph — documentation second, soft fitness third.",
         sources: [
           {
             provider: "MarketLogic",
@@ -662,7 +662,7 @@ const conversations: [Conversation, ...Conversation[]] = [
       {
         id: 8,
         role: "assistant",
-        text: "I can't complete that pull — Nichefire's velocity endpoint has been unavailable for the past hour, so the 90-day trend is missing from this answer. What I can offer is the cached January snapshot, which showed run-club velocity still accelerating with no plateau signature. On that stale basis alone, the signal's durability through year-end forecasts positive, but treat this as provisional until the live pull lands.",
+        text: "I can't complete that pull — Nichefire's `velocity` endpoint has returned `503 Service Unavailable` for the past hour, so the 90-day trend is missing from this answer. What I can offer is the cached January snapshot, which showed run-club velocity still accelerating with no plateau signature. On that stale basis alone, the signal's durability through year-end forecasts positive, but treat this as *provisional* until the live pull lands.",
         confidence: 58,
         sources: [
           {
@@ -725,7 +725,7 @@ const conversations: [Conversation, ...Conversation[]] = [
 ]
 
 const cannedReply =
-  "Got it — this is a canned reply. Wire up real responses in the app, not here."
+  "Got it — this is a **canned reply**. Wire up real responses in the app, not here:\n\n1. Point the composer at your API\n2. Stream tokens into the thread\n3. Render them with `<Bubble markdown>`"
 
 /* Composer fixtures — the research platforms the demo cites, plus a small
  * command palette and model roster. All demo-only. */
@@ -939,7 +939,10 @@ function ChatDemo() {
               <ul className="mx-auto mt-auto flex w-full max-w-4xl flex-col gap-4">
                 {messages.map((message) => (
                   <li key={message.id} className="flex flex-col">
-                    <Bubble from={message.role === "user" ? "user" : "system"}>
+                    <Bubble
+                      from={message.role === "user" ? "user" : "system"}
+                      markdown={message.role === "assistant"}
+                    >
                       {message.text}
                       {message.sources?.length ? (
                         <div>

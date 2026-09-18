@@ -137,6 +137,27 @@
   --or-plum-900: oklch(38% 0.053 310.93);
   --or-plum-950: oklch(26% 0.044 299.92);
 
+  /* Berry ramp, the cold formal blue — seeded from juniper berries. Hue is
+     distributed perfectly evenly, 236 (frost) → 278 (berry violet) at
+     4.2°/step. Chroma: smoothstep 0.018 → 0.078 peaking at 700, cosine
+     relax to 0.067 at 950 — a register between plum's 0.076 and fern's
+     0.058 so the blue carries weight without shouting. The 700 slot sits
+     at 48.18% lightness (off-ladder, like fern's ash pin): at the ladder's
+     50% the cold hue leaves 700-on-100 text at 4.50:1 borderline; the pin
+     lifts it to 4.87:1. The dark end is the formal register — 950 on 100
+     clears AAA at 11.7:1. */
+  --or-berry-50: oklch(96% 0.018 236);
+  --or-berry-100: oklch(90% 0.0213 240.2);
+  --or-berry-200: oklch(83% 0.0299 244.4);
+  --or-berry-300: oklch(79% 0.0416 248.6);
+  --or-berry-400: oklch(73% 0.0544 252.8);
+  --or-berry-500: oklch(65% 0.0661 257);
+  --or-berry-600: oklch(56% 0.0747 261.2);
+  --or-berry-700: oklch(48.18% 0.078 265.4);
+  --or-berry-800: oklch(44% 0.0752 269.6);
+  --or-berry-900: oklch(38% 0.0698 273.8);
+  --or-berry-950: oklch(26% 0.067 278);
+
   --or-background: oklch(1 0 0);
   --or-foreground: oklch(0.145 0 0);
 
@@ -254,6 +275,18 @@
   --color-plum-800: var(--or-plum-800);
   --color-plum-900: var(--or-plum-900);
   --color-plum-950: var(--or-plum-950);
+
+  --color-berry-50: var(--or-berry-50);
+  --color-berry-100: var(--or-berry-100);
+  --color-berry-200: var(--or-berry-200);
+  --color-berry-300: var(--or-berry-300);
+  --color-berry-400: var(--or-berry-400);
+  --color-berry-500: var(--or-berry-500);
+  --color-berry-600: var(--or-berry-600);
+  --color-berry-700: var(--or-berry-700);
+  --color-berry-800: var(--or-berry-800);
+  --color-berry-900: var(--or-berry-900);
+  --color-berry-950: var(--or-berry-950);
 
   --color-background: var(--or-background);
   --color-foreground: var(--or-foreground);

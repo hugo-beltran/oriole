@@ -64,6 +64,35 @@ describe("Bubble", () => {
     expect(screen.getByTestId("bubble")).not.toHaveClass("rounded-br-sm")
   })
 
+  it("renders string children as Markdown when enabled", () => {
+    renderWithAxe(
+      <Bubble markdown>
+        {"Two groups stand out:\n\n- **55+** households\n- `18–24` students"}
+      </Bubble>,
+    )
+    expect(screen.getByRole("list")).toBeInTheDocument()
+    const strong = screen.getByText("55+")
+    expect(strong.tagName).toBe("STRONG")
+    expect(screen.getByText("18–24").tagName).toBe("CODE")
+  })
+
+  it("treats markup as plain text without the markdown flag", () => {
+    renderWithAxe(<Bubble>{"- **55+** households"}</Bubble>)
+    expect(screen.queryByRole("list")).toBeNull()
+    expect(screen.getByText("- **55+** households")).toBeInTheDocument()
+  })
+
+  it("passes non-string children through untouched alongside Markdown", () => {
+    renderWithAxe(
+      <Bubble markdown>
+        {"A **formatted** reply"}
+        <span data-testid="chip">chip</span>
+      </Bubble>,
+    )
+    expect(screen.getByText("formatted").tagName).toBe("STRONG")
+    expect(screen.getByTestId("chip")).toBeInTheDocument()
+  })
+
   it("merges a consumer className and resolves conflicts in its favor", () => {
     renderWithAxe(
       <Bubble data-testid="bubble" className="max-w-full font-medium">

@@ -101,6 +101,23 @@ const ramps: Ramp[] = [
       "950": "bg-plum-950",
     },
   },
+  {
+    name: "berry",
+    note: "The cold formal blue, seeded from juniper berries: frost tints, even hue sweep into berry violet, AAA-strength dark end.",
+    swatches: {
+      "50": "bg-berry-50",
+      "100": "bg-berry-100",
+      "200": "bg-berry-200",
+      "300": "bg-berry-300",
+      "400": "bg-berry-400",
+      "500": "bg-berry-500",
+      "600": "bg-berry-600",
+      "700": "bg-berry-700",
+      "800": "bg-berry-800",
+      "900": "bg-berry-900",
+      "950": "bg-berry-950",
+    },
+  },
 ]
 
 // Values are read from the live stylesheet so this page can never drift
@@ -126,7 +143,7 @@ function ColorsPage() {
   return (
     <Page
       title="Colors"
-      description="The four Oriole ramps — nectarine (brand), fern, driftwood (neutral), and plum (accent). Hover a swatch for its oklch value. Override any --or-* variable to re-brand."
+      description="The five Oriole ramps — nectarine (brand), fern, driftwood (neutral), plum (accent), and berry (cold formal blue). Hover a swatch for its oklch value. Override any --or-* variable to re-brand."
     >
       {/* one block so the ramps sit close together despite Page's space-y-12 */}
       <div className="space-y-5">

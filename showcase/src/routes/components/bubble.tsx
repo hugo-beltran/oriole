@@ -49,6 +49,22 @@ function BubblePage() {
       </Example>
 
       <Example
+        title="Markdown"
+        code={`<Bubble from="system" markdown>
+  {"Two segments stand out:\\n\\n- **55+ households** — 12% of spend\\n- **18–24 students** — \`2.3×\` single-serve index"}
+</Bubble>`}
+      >
+        <div className="flex w-full flex-col gap-2">
+          <Bubble from="user">Which segments are we missing?</Bubble>
+          <Bubble from="system" markdown>
+            {
+              "Two segments stand out:\n\n- **55+ households** — 12% of spend\n- **18–24 students** — `2.3×` single-serve index\n\nSee the [loyalty panel](https://example.com) for the splits."
+            }
+          </Bubble>
+        </div>
+      </Example>
+
+      <Example
         title="Grouped messages"
         code={`<div className="flex w-full flex-col gap-1">
   <Bubble from="system" tail={false}>Three quick things.</Bubble>

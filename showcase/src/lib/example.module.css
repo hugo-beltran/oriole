@@ -1,0 +1,50 @@
+.page {
+  max-width: 48rem;
+}
+
+.title {
+  font-family: var(--or-font-display);
+  font-size: 1.875rem;
+  font-weight: 700;
+  line-height: 2.25rem;
+}
+
+.description {
+  color: var(--or-muted-foreground);
+  margin-top: 0.5rem;
+}
+
+.examples {
+  margin-top: 2.5rem;
+
+  > * + * {
+    margin-top: 3rem;
+  }
+}
+
+.heading {
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.75rem;
+}
+
+.preview {
+  align-items: center;
+  border: 1px solid var(--or-border);
+  border-radius: var(--or-radius);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 0.75rem;
+  padding: 1.5rem;
+}
+
+.code {
+  background-color: var(--or-muted);
+  border-radius: var(--or-radius);
+  font-size: 0.75rem;
+  line-height: 1rem;
+  margin-top: 0.75rem;
+  overflow-x: auto;
+  padding: 1rem;
+}

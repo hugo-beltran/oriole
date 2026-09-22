@@ -1,6 +1,6 @@
+import { clsx } from "clsx"
 import type { ComponentProps } from "react"
-
-import { cn } from "../../lib/utils.js"
+import styles from "./perch.module.css"
 
 /**
  * Perch — the singular floating surface. Sits above the Canvas the way an
@@ -8,16 +8,7 @@ import { cn } from "../../lib/utils.js"
  * the atmosphere gradient. One per view, not for in-flow content.
  */
 function Perch({ className, ...props }: ComponentProps<"div">) {
-  return (
-    <div
-      className={cn(
-        "isolate rounded-2xl border border-driftwood-50/50 bg-card/60",
-        "text-card-foreground shadow-xl ring-1 ring-driftwood-800/10 backdrop-blur-xl",
-        className,
-      )}
-      {...props}
-    />
-  )
+  return <div className={clsx(styles.perch, className)} {...props} />
 }
 
 export { Perch }

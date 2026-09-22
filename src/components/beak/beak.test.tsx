@@ -4,6 +4,7 @@ import { createRef } from "react"
 import { describe, expect, it, vi } from "vitest"
 import { renderWithAxe } from "../../../test/test-utils"
 import { Beak, type BeakItem, type BeakModel } from "./beak"
+import styles from "./beak.module.css"
 
 const sources: BeakItem[] = [
   { id: "panel", label: "Loyalty panel", description: "Household data" },
@@ -157,7 +158,7 @@ describe("Beak", () => {
 
   it("rounds fully in the pill variant", () => {
     const { container } = renderWithAxe(<Beak variant="pill" />)
-    expect(container.querySelector(".rounded-full")).not.toBeNull()
+    expect(container.querySelector(`.${styles.pill}`)).not.toBeNull()
   })
 
   it("disables the input and send when isDisabled", () => {
@@ -166,11 +167,11 @@ describe("Beak", () => {
     expect(screen.getByRole("button", { name: "Send" })).toBeDisabled()
   })
 
-  it("forwards its ref and merges a consumer className", () => {
+  it("forwards its ref and appends a consumer className", () => {
     const ref = createRef<HTMLDivElement>()
-    renderWithAxe(<Beak ref={ref} className="max-w-2xl" />)
+    renderWithAxe(<Beak ref={ref} className="consumer" />)
     expect(ref.current).toBeInstanceOf(HTMLDivElement)
-    expect(ref.current).toHaveClass("max-w-2xl")
+    expect(ref.current).toHaveClass(styles.beak, "consumer")
   })
 
   it("has no axe violations, including with menus open", async () => {

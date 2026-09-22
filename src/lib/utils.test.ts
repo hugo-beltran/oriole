@@ -7,8 +7,8 @@ describe("cn", () => {
     expect(cn("a", "b")).toBe("a b")
   })
 
-  it("resolves tailwind conflicts in favor of the last class", () => {
-    expect(cn("px-2 py-1", "px-4")).toBe("py-1 px-4")
+  it("keeps every class, leaving conflicts to the cascade", () => {
+    expect(cn("px-2 py-1", "px-4")).toBe("px-2 py-1 px-4")
   })
 
   it("ignores falsy values", () => {

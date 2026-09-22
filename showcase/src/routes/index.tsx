@@ -12,7 +12,6 @@ import {
   Beak,
   type BeakItem,
   Bubble,
-  cn,
   Nest,
   NestChat,
   NestGroup,
@@ -23,8 +22,10 @@ import {
   Perch,
 } from "@mycodemedia/oriole"
 import { createFileRoute } from "@tanstack/react-router"
+import { clsx } from "clsx"
 import { useEffect, useRef, useState } from "react"
 import OrioleMark from "../assets/oriole-wordmark.svg?react"
+import styles from "./index.module.css"
 
 export const Route = createFileRoute("/")({
   validateSearch: (search: Record<string, unknown>): { chat?: string } => ({
@@ -759,13 +760,13 @@ const demoTranscript =
 function ConfidenceChip({ value }: { value: number }) {
   return (
     <span
-      className={cn(
-        "mt-1.5 inline-flex w-fit items-center gap-1 rounded-full border px-2 py-0.5 text-xs font-medium tabular-nums",
+      className={clsx(
+        styles.chip,
         value >= 80
-          ? "border-fern-300 bg-fern-50 text-fern-900"
+          ? styles.chipHigh
           : value >= 65
-            ? "border-nectarine-200 bg-nectarine-50 text-nectarine-900"
-            : "border-driftwood-300 bg-driftwood-50 text-driftwood-900",
+            ? styles.chipMid
+            : styles.chipLow,
       )}
     >
       Forecast · {value}% confidence
@@ -776,7 +777,7 @@ function ConfidenceChip({ value }: { value: number }) {
 /* Fake citations — demo only, so navigation is suppressed. */
 function SourceLinks({ sources }: { sources: Source[] }) {
   return (
-    <span className="mt-1.5 flex flex-wrap gap-x-3 gap-y-1">
+    <span className={styles.sources}>
       {sources.map((source) => {
         const label = source.provider
           ? `${source.provider} · ${source.label}`
@@ -784,7 +785,7 @@ function SourceLinks({ sources }: { sources: Source[] }) {
         return source.status === "unavailable" ? (
           <span
             key={label}
-            className="text-xs italic text-driftwood-500"
+            className={styles.sourceUnavailable}
             title="This source could not be reached"
           >
             {label} · unavailable
@@ -794,7 +795,7 @@ function SourceLinks({ sources }: { sources: Source[] }) {
             key={label}
             href={source.href}
             onClick={(event) => event.preventDefault()}
-            className="text-xs font-medium text-plum-800 underline underline-offset-2 hover:text-plum-900"
+            className={styles.sourceLink}
           >
             {label} ↗
           </a>
@@ -807,8 +808,8 @@ function SourceLinks({ sources }: { sources: Source[] }) {
 /* slot: Callout component */
 function DisagreementNote({ text }: { text: string }) {
   return (
-    <span className="mt-1.5 block w-fit rounded-lg border border-plum-300 bg-plum-50 px-2.5 py-1.5 text-xs leading-relaxed text-plum-900">
-      <span className="font-semibold">Sources disagree — </span>
+    <span className={styles.note}>
+      <span className={styles.noteLead}>Sources disagree — </span>
       {text}
     </span>
   )
@@ -890,8 +891,8 @@ function ChatDemo() {
 
   return (
     <NestProvider>
-      <div className="flex h-[calc(100vh-8rem)] items-start gap-2">
-        <Nest className="h-full">
+      <div className={styles.shell}>
+        <Nest className={styles.nest}>
           <NestHead>
             <OrioleMark aria-hidden />
           </NestHead>
@@ -916,9 +917,9 @@ function ChatDemo() {
             {conversations.map((conversation) => (
               <NestChat
                 key={conversation.id}
-                className={cn(
-                  conversation.id === active.id && "bg-card/80 text-foreground",
-                )}
+                className={
+                  conversation.id === active.id ? styles.active : undefined
+                }
                 onPress={() => navigate({ search: { chat: conversation.id } })}
               >
                 {conversation.title}
@@ -927,18 +928,13 @@ function ChatDemo() {
           </NestGroup>
         </Nest>
 
-        <Perch className="relative flex h-full min-w-0 flex-1">
-          <NestToggle className="absolute left-2 top-2 z-10" />
-          <div className="flex min-w-0 flex-1 flex-col">
-            <div
-              ref={threadRef}
-              className="flex flex-1 flex-col overflow-y-auto py-4 ps-12 pe-6 mt-4 scrollbar-track-transparent scrollbar-thumb-driftwood-300/50"
-            >
-              {/* experiment: mt-auto pins short threads to the bottom,
-                  IM-style, while long threads scroll normally */}
-              <ul className="mx-auto mt-auto flex w-full max-w-4xl flex-col gap-4">
+        <Perch className={styles.perch}>
+          <NestToggle className={styles.toggle} />
+          <div className={styles.column}>
+            <div ref={threadRef} className={styles.thread}>
+              <ul className={styles.messages}>
                 {messages.map((message) => (
-                  <li key={message.id} className="flex flex-col">
+                  <li key={message.id} className={styles.message}>
                     <Bubble
                       from={message.role === "user" ? "user" : "system"}
                       markdown={message.role === "assistant"}
@@ -965,11 +961,9 @@ function ChatDemo() {
               </ul>
             </div>
 
-            {/* gutters mirror the thread's (ps-12 pe-6 + max-w-4xl) so the
-                composer's edges line up with the bubbles above */}
-            <footer className="ps-12 pe-6 pt-2 pb-4">
+            <footer className={styles.footer}>
               <Beak
-                className="mx-auto max-w-4xl"
+                className={styles.composer}
                 placeholder="Message the assistant…"
                 sources={sources}
                 commands={commands}

@@ -11,6 +11,7 @@ import {
   NestProvider,
   NestToggle,
 } from "./nest"
+import styles from "./nest.module.css"
 
 // The toggle lives outside the Nest (e.g. on the Perch), wired through NestProvider.
 function demoNest() {
@@ -56,22 +57,14 @@ describe("Nest", () => {
     )
     const nest = screen.getByTestId("nest")
     expect(nest).toHaveAttribute("data-collapsed")
-    expect(nest).toHaveClass("w-14")
+    expect(nest).toHaveClass(styles.nest)
     // row copy stays mounted — the width clip sweeps over it, shadcn-style
     expect(screen.getByText("⌘N")).toBeInTheDocument()
     // rows are full-width clips that auto-shrink around their mandatory icon
-    expect(screen.getByRole("button", { name: "Home" })).toHaveClass(
-      "w-full",
-      "min-w-0",
-      "overflow-hidden",
-    )
+    expect(screen.getByRole("button", { name: "Home" })).toHaveClass(styles.row)
     // shortcut hints and detail stats carry the collapse fade
-    expect(screen.getByText("⌘N")).toHaveClass(
-      "group-data-collapsed/nest:opacity-0",
-    )
-    expect(screen.getByText("3/10")).toHaveClass(
-      "group-data-collapsed/nest:opacity-0",
-    )
+    expect(screen.getByText("⌘N")).toHaveClass(styles.collapseFade)
+    expect(screen.getByText("3/10")).toHaveClass(styles.collapseFade)
     // the titled group is faded and inert: invisible, unfocusable, gone from a11y
     expect(screen.getByText("Chats").closest("[inert]")).not.toBeNull()
     // the icon-row group opted out of hiding, so it survives the collapse
@@ -93,7 +86,7 @@ describe("Nest", () => {
       screen.getByRole("button", { name: "Collapse sidebar" }),
     )
     const brand = screen.getByText("Oriole").closest("[aria-hidden]")
-    expect(brand).toHaveClass("opacity-0")
+    expect(brand).toHaveClass(styles.fade, styles.faded)
   })
 
   it("renders previous chats as text-only rows that retire on collapse", async () => {
@@ -101,7 +94,7 @@ describe("Nest", () => {
     const chat = screen.getByRole("button", { name: "Supplier records" })
     expect(chat.querySelector("svg")).toBeNull()
     // no icon to shrink around — the row fades with the collapse instead
-    expect(chat).toHaveClass("group-data-collapsed/nest:opacity-0")
+    expect(chat).toHaveClass(styles.collapseFade)
     await userEvent.click(
       screen.getByRole("button", { name: "Collapse sidebar" }),
     )
@@ -132,7 +125,7 @@ describe("Nest", () => {
     expect(screen.getByText("Flavor page ticket")).toBeInTheDocument()
   })
 
-  it("fires onPress on a row and merges consumer classNames", async () => {
+  it("fires onPress on a row and appends consumer classNames", async () => {
     const onPress = vi.fn()
     renderWithAxe(
       <Nest>
@@ -140,7 +133,7 @@ describe("Nest", () => {
           <NestLink
             icon={<svg aria-hidden="true" />}
             onPress={onPress}
-            className="h-10"
+            className="consumer"
           >
             Home
           </NestLink>
@@ -150,8 +143,7 @@ describe("Nest", () => {
     const row = screen.getByRole("button", { name: "Home" })
     await userEvent.click(row)
     expect(onPress).toHaveBeenCalledTimes(1)
-    expect(row).toHaveClass("h-10")
-    expect(row).not.toHaveClass("h-8")
+    expect(row).toHaveClass(styles.row, "consumer")
   })
 
   it("has no axe violations", async () => {

@@ -1,3 +1,5 @@
-@import "tailwindcss";
-@import "@mycodemedia/oriole/theme.css";
-@source "../../src";
+@import "../../src/styles/global.css";
+
+body {
+  color: var(--or-foreground);
+}

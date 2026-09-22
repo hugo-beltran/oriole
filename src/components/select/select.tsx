@@ -1,5 +1,6 @@
 "use client"
 
+import { clsx } from "clsx"
 import type { ReactNode, Ref } from "react"
 import {
   Button as AriaButton,
@@ -12,26 +13,7 @@ import {
   SelectValue as AriaSelectValue,
   type SelectValueProps as AriaSelectValueProps,
 } from "react-aria-components"
-import { cn } from "../../lib/utils.js"
-
-const slots = {
-  root: "group flex flex-col gap-1.5",
-  trigger: [
-    "flex h-9 w-full items-center justify-between gap-2 rounded-md border border-input bg-background px-3 py-2 text-sm",
-    "outline-none data-[focus-visible]:ring-2 data-[focus-visible]:ring-ring data-[focus-visible]:ring-offset-2 data-[focus-visible]:ring-offset-background",
-    "data-[hovered]:bg-accent/50 data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50",
-    "[&>[data-placeholder]]:text-muted-foreground",
-  ],
-  content: [
-    "min-w-(--trigger-width) overflow-auto rounded-md border border-border bg-popover p-1 text-popover-foreground shadow-md",
-    "data-[entering]:animate-in data-[entering]:fade-in-0 data-[exiting]:animate-out data-[exiting]:fade-out-0",
-  ],
-  item: [
-    "flex cursor-default select-none items-center justify-between gap-2 rounded-sm px-2 py-1.5 text-sm outline-none",
-    "data-[focused]:bg-accent data-[focused]:text-accent-foreground",
-    "data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
-  ],
-}
+import styles from "./select.module.css"
 
 interface SelectProps<T extends object>
   extends Omit<AriaSelectProps<T>, "children" | "className"> {
@@ -40,8 +22,14 @@ interface SelectProps<T extends object>
   ref?: Ref<HTMLDivElement>
 }
 
+/**
+ * Select — a compound picker over react-aria's Select. Compose it from
+ * `SelectTrigger` (with `SelectValue` inside) and `SelectContent` holding
+ * `SelectItem`s; the popover and listbox are fused so no render props cross
+ * the API. Pair it with a react-aria `Label`.
+ */
 function Select<T extends object>({ className, ...props }: SelectProps<T>) {
-  return <AriaSelect className={cn(slots.root, className)} {...props} />
+  return <AriaSelect className={clsx(styles.select, className)} {...props} />
 }
 
 interface SelectTriggerProps {
@@ -52,7 +40,7 @@ interface SelectTriggerProps {
 
 function SelectTrigger({ className, children, ...props }: SelectTriggerProps) {
   return (
-    <AriaButton className={cn(slots.trigger, className)} {...props}>
+    <AriaButton className={clsx(styles.trigger, className)} {...props}>
       {children}
       <ChevronDownIcon />
     </AriaButton>
@@ -75,8 +63,8 @@ interface SelectContentProps {
 
 function SelectContent({ className, children }: SelectContentProps) {
   return (
-    <AriaPopover className={cn(slots.content, className)}>
-      <AriaListBox className="outline-none">{children}</AriaListBox>
+    <AriaPopover className={clsx(styles.content, className)}>
+      <AriaListBox className={styles.list}>{children}</AriaListBox>
     </AriaPopover>
   )
 }
@@ -91,7 +79,7 @@ interface SelectItemProps
 function SelectItem({ className, children, ...props }: SelectItemProps) {
   return (
     <AriaListBoxItem
-      className={cn(slots.item, className)}
+      className={clsx(styles.item, className)}
       textValue={typeof children === "string" ? children : props.textValue}
       {...props}
     >
@@ -109,7 +97,7 @@ function ChevronDownIcon() {
   return (
     <svg
       aria-hidden="true"
-      className="size-4 opacity-50"
+      className={styles.chevron}
       viewBox="0 0 16 16"
       fill="none"
       stroke="currentColor"
@@ -126,7 +114,7 @@ function CheckIcon() {
   return (
     <svg
       aria-hidden="true"
-      className="size-4"
+      className={styles.check}
       viewBox="0 0 16 16"
       fill="none"
       stroke="currentColor"

@@ -14,6 +14,7 @@ import {
 } from "@mycodemedia/oriole"
 import { createFileRoute } from "@tanstack/react-router"
 import { Example, Page } from "../../lib/example"
+import styles from "./nest.module.css"
 
 export const Route = createFileRoute("/components/nest")({
   component: NestPage,
@@ -31,7 +32,7 @@ const chats = [
 
 function DemoNest(props: { defaultCollapsed?: boolean }) {
   return (
-    <Nest className="h-[420px]" defaultCollapsed={props.defaultCollapsed}>
+    <Nest className={styles.demo} defaultCollapsed={props.defaultCollapsed}>
       <NestHead
         label="Creamery Ops"
         icon={<HugeiconsIcon icon={BirdIcon} size={16} />}

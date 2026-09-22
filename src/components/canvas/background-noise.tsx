@@ -1,13 +1,12 @@
 import { useId } from "react"
+import styles from "./canvas.module.css"
 
-export function BackgroundNoise() {
+/** Film-grain overlay for the Canvas. */
+function BackgroundNoise() {
   const id = useId()
 
   return (
-    <svg
-      className="absolute inset-0 w-full h-full pointer-events-none"
-      aria-hidden="true"
-    >
+    <svg className={styles.noise} aria-hidden="true">
       <filter id={id}>
         <feTurbulence
           type="fractalNoise"
@@ -18,7 +17,9 @@ export function BackgroundNoise() {
         <feColorMatrix type="saturate" values="0" />
         <feBlend in="SourceGraphic" mode="overlay" />
       </filter>
-      <rect width="100%" height="100%" filter={`url(#${id})`} opacity="0.016" />
+      <rect width="100%" height="100%" filter={`url(#${id})`} opacity="0.03" />
     </svg>
   )
 }
+
+export { BackgroundNoise }

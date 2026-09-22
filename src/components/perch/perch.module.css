@@ -1,0 +1,23 @@
+/* Perch — the singular floating surface, glassy and elevated over the
+   Canvas. */
+/* Component rules live in the `components` cascade layer (see
+   styles/global.css) so any unlayered consumer class wins by cascade order.
+   The statement pins `base` below `components` even when this module is
+   parsed before global.css, so the reset never beats a component rule. */
+@layer base, components;
+
+@layer components {
+  .perch {
+    backdrop-filter: blur(24px);
+    background-color: color-mix(in oklab, var(--or-card) 60%, transparent);
+    border: 1px solid
+      color-mix(in oklab, var(--or-driftwood-50) 50%, transparent);
+    border-radius: 1rem;
+    box-shadow:
+      0 0 0 1px color-mix(in oklab, var(--or-driftwood-800) 10%, transparent),
+      0 20px 25px -5px rgb(0 0 0 / 0.1),
+      0 8px 10px -6px rgb(0 0 0 / 0.1);
+    color: var(--or-card-foreground);
+    isolation: isolate;
+  }
+}

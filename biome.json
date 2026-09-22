@@ -6,7 +6,12 @@
     "useIgnoreFile": true
   },
   "files": {
-    "includes": ["**", "!showcase/src/routeTree.gen.ts", "!dist"]
+    "includes": [
+      "**",
+      "!showcase/src/routeTree.gen.ts",
+      "!dist",
+      "!**/*.module.css.d.ts"
+    ]
   },
   "formatter": {
     "enabled": true,
@@ -22,7 +27,7 @@
   },
   "css": {
     "parser": {
-      "tailwindDirectives": true
+      "cssModules": true
     }
   },
   "assist": {

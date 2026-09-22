@@ -4,6 +4,7 @@ import { createRef } from "react"
 import { describe, expect, it, vi } from "vitest"
 import { renderWithAxe } from "../../../test/test-utils"
 import { Button } from "./button"
+import styles from "./button.module.css"
 
 describe("Button", () => {
   it("renders its children", async () => {
@@ -30,12 +31,25 @@ describe("Button", () => {
     expect(screen.getByRole("button")).toBeDisabled()
   })
 
-  it("merges a consumer className and resolves conflicts in its favor", () => {
-    renderWithAxe(<Button className="h-12 tracking-wide">Save</Button>)
+  it("applies the default variant and size, then the consumer className", () => {
+    renderWithAxe(<Button className="consumer">Save</Button>)
+    expect(screen.getByRole("button")).toHaveClass(
+      styles.button,
+      styles.default,
+      styles.md,
+      "consumer",
+    )
+  })
+
+  it("switches variant and size classes", () => {
+    renderWithAxe(
+      <Button variant="outline" size="sm">
+        Save
+      </Button>,
+    )
     const button = screen.getByRole("button")
-    expect(button).toHaveClass("tracking-wide")
-    expect(button).toHaveClass("h-12")
-    expect(button).not.toHaveClass("h-9")
+    expect(button).toHaveClass(styles.outline, styles.sm)
+    expect(button).not.toHaveClass(styles.default, styles.md)
   })
 
   it("forwards its ref to the underlying DOM element", () => {

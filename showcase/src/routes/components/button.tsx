@@ -1,6 +1,7 @@
 import { Button } from "@mycodemedia/oriole"
 import { createFileRoute } from "@tanstack/react-router"
 import { Example, Page } from "../../lib/example"
+import styles from "./button.module.css"
 
 export const Route = createFileRoute("/components/button")({
   component: ButtonPage,
@@ -47,9 +48,10 @@ function ButtonPage() {
 
       <Example
         title="Custom className"
-        code={`<Button className="rounded-full px-8">Pill</Button>`}
+        code={`/* .pill { border-radius: 9999px; padding-inline: 2rem } */
+<Button className={styles.pill}>Pill</Button>`}
       >
-        <Button className="rounded-full px-8">Pill</Button>
+        <Button className={styles.pill}>Pill</Button>
       </Example>
     </Page>
   )

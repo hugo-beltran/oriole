@@ -1,0 +1,475 @@
+/* Beak — the prompt bar. Shape variants hang off `.pill` on the root;
+   `.grown` on the composer marks the wrapped/attachments state.
+   Micro-animations (menu pop, dictation equalizer) are module keyframes on
+   classes, so the component needs no inline animation shorthands. */
+/* Component rules live in the `components` cascade layer (see
+   styles/global.css) so any unlayered consumer class wins by cascade order.
+   The statement pins `base` below `components` even when this module is
+   parsed before global.css, so the reset never beats a component rule. */
+@layer base, components;
+
+@layer components {
+  .beak {
+    width: 100%;
+  }
+
+  .anchor {
+    position: relative;
+  }
+
+  /* ── menus ─────────────────────────────────────────── */
+  .menuSurface {
+    background-color: var(--or-popover);
+    border: 1px solid var(--or-border);
+    border-radius: 10px;
+    box-shadow:
+      0 4px 6px -1px rgb(0 0 0 / 0.1),
+      0 2px 4px -2px rgb(0 0 0 / 0.1);
+    color: var(--or-popover-foreground);
+    padding: 0.25rem;
+  }
+
+  .popIn {
+    animation: popIn 180ms cubic-bezier(0.23, 1, 0.32, 1) both;
+  }
+
+  .tokenMenu {
+    bottom: 100%;
+    inset-inline: 0;
+    margin-bottom: 0.5rem;
+    position: absolute;
+    z-index: 10;
+  }
+
+  .modelMenu {
+    position: absolute;
+    width: 11rem;
+    z-index: 10;
+  }
+
+  .list {
+    position: relative;
+  }
+
+  /* single gliding highlight — top/height/opacity are set inline */
+  .glide {
+    background-color: color-mix(
+      in oklab,
+      var(--or-driftwood-100) 80%,
+      transparent
+    );
+    border-radius: calc(var(--or-radius) - 0.125rem);
+    inset-inline: 0;
+    pointer-events: none;
+    position: absolute;
+    transition:
+      top 220ms cubic-bezier(0.23, 1, 0.32, 1),
+      height 220ms cubic-bezier(0.23, 1, 0.32, 1),
+      opacity 150ms ease;
+  }
+
+  .row {
+    align-items: center;
+    border-radius: calc(var(--or-radius) - 0.125rem);
+    display: flex;
+    gap: 0.625rem;
+    height: 2.25rem;
+    outline: none;
+    padding-inline: 0.5rem;
+    position: relative;
+    text-align: left;
+    width: 100%;
+    z-index: 10;
+  }
+
+  .modelRow {
+    align-items: center;
+    border-radius: calc(var(--or-radius) - 0.125rem);
+    display: flex;
+    gap: 0.5rem;
+    height: 1.875rem;
+    outline: none;
+    padding-inline: 0.5rem;
+    position: relative;
+    text-align: left;
+    width: 100%;
+    z-index: 10;
+  }
+
+  .rowIcon {
+    align-items: center;
+    color: color-mix(in oklab, var(--or-foreground) 70%, transparent);
+    display: flex;
+    flex-shrink: 0;
+    height: 1.375rem;
+    justify-content: center;
+    width: 1.375rem;
+  }
+
+  .rowLabel {
+    color: var(--or-foreground);
+    flex-shrink: 0;
+    font-size: 12.5px;
+    font-weight: 500;
+  }
+
+  .rowDescription {
+    color: var(--or-muted-foreground);
+    flex: 1;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .empty {
+    align-items: center;
+    color: var(--or-muted-foreground);
+    display: flex;
+    font-size: 0.75rem;
+    height: 2.25rem;
+    line-height: 1rem;
+    padding-inline: 0.5rem;
+  }
+
+  .hint {
+    border-top: 1px solid var(--or-border);
+    color: var(--or-muted-foreground);
+    font-size: 11px;
+    margin-top: 0.25rem;
+    padding: 0.375rem 0.5rem 0.25rem;
+  }
+
+  .modelLabel {
+    color: var(--or-foreground);
+    flex: 1;
+    font-size: 12.5px;
+    font-weight: 500;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .modelTag {
+    color: var(--or-muted-foreground);
+    flex-shrink: 0;
+    font-size: 11px;
+  }
+
+  .modelCheck {
+    color: var(--or-foreground);
+    flex-shrink: 0;
+  }
+
+  .hidden {
+    visibility: hidden;
+  }
+
+  /* ── composer ──────────────────────────────────────── */
+  .composer {
+    background-color: var(--or-background);
+    border: 1px solid var(--or-input);
+    border-radius: 14px;
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    isolation: isolate;
+    overflow: hidden;
+    padding: 0.375rem;
+    position: relative;
+    transition:
+      border-color 150ms,
+      border-radius 150ms;
+
+    &:focus-within {
+      border-color: var(--or-driftwood-400);
+    }
+  }
+
+  .disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  /* mirrors the draft so wrapping can be detected before it happens */
+  .measure {
+    font-size: 13px;
+    line-height: 18px;
+    pointer-events: none;
+    position: absolute;
+    visibility: hidden;
+    white-space: pre;
+  }
+
+  .attachments {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+    padding-inline: 0.125rem;
+    padding-top: 0.125rem;
+  }
+
+  .chip {
+    align-items: center;
+    background-color: var(--or-muted);
+    border-radius: calc(var(--or-radius) - 0.125rem);
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    color: color-mix(in oklab, var(--or-foreground) 70%, transparent);
+    display: flex;
+    font-size: 11.5px;
+    gap: 0.375rem;
+    height: 1.625rem;
+    padding: 0.25rem 0.25rem 0.25rem 0.375rem;
+  }
+
+  .chipName {
+    max-width: 9rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .chipRemove {
+    align-items: center;
+    border-radius: calc(var(--or-radius) - 0.25rem);
+    color: var(--or-muted-foreground);
+    display: flex;
+    height: 1.5rem;
+    justify-content: center;
+    margin-block: -0.25rem;
+    outline: none;
+    transition:
+      color 100ms,
+      background-color 100ms;
+    width: 1.5rem;
+
+    &:hover {
+      background-color: color-mix(in oklab, var(--or-border) 70%, transparent);
+      color: var(--or-foreground);
+    }
+
+    &:focus-visible {
+      box-shadow: 0 0 0 2px var(--or-ring);
+    }
+  }
+
+  .controls {
+    align-items: flex-end;
+    column-gap: 0.25rem;
+    display: flex;
+    flex-wrap: wrap;
+    row-gap: 0.375rem;
+  }
+
+  .iconButton {
+    align-items: center;
+    border-radius: var(--or-radius);
+    color: var(--or-muted-foreground);
+    display: flex;
+    flex-shrink: 0;
+    height: 1.75rem;
+    justify-content: center;
+    outline: none;
+    transition:
+      background-color 150ms,
+      color 150ms,
+      transform 150ms;
+    width: 1.75rem;
+
+    &:hover {
+      background-color: var(--or-accent);
+      color: var(--or-foreground);
+    }
+
+    &:active {
+      transform: scale(0.94);
+    }
+
+    &:focus-visible {
+      box-shadow: 0 0 0 2px var(--or-ring);
+    }
+  }
+
+  .plus {
+    order: 1;
+  }
+
+  .engaged {
+    background-color: var(--or-accent);
+    color: var(--or-foreground);
+  }
+
+  .input {
+    background-color: transparent;
+    color: var(--or-foreground);
+    flex-basis: 0;
+    flex-grow: 1;
+    font-size: 13px;
+    line-height: 18px;
+    min-height: 1.75rem;
+    min-width: 0;
+    order: 2;
+    outline: none;
+    overflow-wrap: anywhere;
+    padding: 5px 0.25rem;
+    resize: none;
+    width: auto;
+
+    &::placeholder {
+      color: var(--or-muted-foreground);
+    }
+  }
+
+  .inputExpanded {
+    flex-basis: 100%;
+    order: -9999;
+  }
+
+  .modelTrigger {
+    align-items: center;
+    border-radius: var(--or-radius);
+    color: color-mix(in oklab, var(--or-foreground) 70%, transparent);
+    display: flex;
+    flex-shrink: 0;
+    font-size: 0.75rem;
+    font-weight: 500;
+    gap: 0.25rem;
+    height: 1.75rem;
+    line-height: 1rem;
+    order: 3;
+    outline: none;
+    padding-inline: 0.375rem;
+    transition:
+      color 150ms,
+      background-color 150ms;
+
+    &:hover {
+      background-color: var(--or-accent);
+      color: var(--or-foreground);
+    }
+
+    &:focus-visible {
+      box-shadow: 0 0 0 2px var(--or-ring);
+    }
+  }
+
+  .modelCaret {
+    color: var(--or-muted-foreground);
+  }
+
+  .mic {
+    order: 4;
+  }
+
+  .pushRight {
+    margin-left: auto;
+  }
+
+  .listening,
+  .listening:hover {
+    background-color: var(--or-fern-100);
+    color: var(--or-fern-800);
+  }
+
+  .eq {
+    align-items: center;
+    display: flex;
+    gap: 2.5px;
+    height: 0.875rem;
+  }
+
+  /* per-bar delay is set inline */
+  .eqBar {
+    animation: eqBounce 900ms ease-in-out infinite;
+    background-color: currentColor;
+    border-radius: 9999px;
+    height: 100%;
+    width: 2.5px;
+  }
+
+  .send {
+    align-items: center;
+    border-radius: var(--or-radius);
+    display: flex;
+    flex-shrink: 0;
+    height: 1.75rem;
+    justify-content: center;
+    order: 5;
+    outline: none;
+    transition:
+      background-color 200ms,
+      color 200ms,
+      transform 200ms;
+    width: 1.75rem;
+
+    &:enabled:active {
+      transform: scale(0.94);
+    }
+
+    &:focus-visible {
+      box-shadow: 0 0 0 2px var(--or-ring);
+    }
+  }
+
+  .sendReady {
+    background-color: var(--or-primary);
+    color: var(--or-primary-foreground);
+
+    &:hover {
+      background-color: color-mix(in oklab, var(--or-primary) 90%, transparent);
+    }
+  }
+
+  .sendIdle {
+    background-color: var(--or-muted);
+    color: var(--or-muted-foreground);
+  }
+
+  /* ── pill variant ──────────────────────────────────── */
+  .pill {
+    .composer {
+      border-radius: 9999px;
+    }
+
+    .composer.grown {
+      border-radius: 1.5rem;
+    }
+
+    .attachments {
+      padding-inline: 0.25rem;
+    }
+
+    .iconButton,
+    .modelTrigger,
+    .send,
+    .chip,
+    .chipRemove {
+      border-radius: 9999px;
+    }
+  }
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes eqBounce {
+  0%,
+  100% {
+    transform: scaleY(0.4);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}

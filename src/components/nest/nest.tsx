@@ -7,6 +7,7 @@ import {
   SidebarLeftIcon,
 } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
+import { clsx } from "clsx"
 import {
   type ComponentProps,
   createContext,
@@ -23,8 +24,7 @@ import {
   Button as AriaButton,
   type ButtonProps as AriaButtonProps,
 } from "react-aria-components"
-
-import { cn } from "../../lib/utils.js"
+import styles from "./nest.module.css"
 
 interface NestContextValue {
   collapsed: boolean
@@ -43,40 +43,8 @@ function useNest() {
 
 const NestGroupContext = createContext<{ query: string }>({ query: "" })
 
-const chromeButton = [
-  "flex shrink-0 items-center justify-center rounded-lg text-muted-foreground transition-colors",
-  "outline-none data-[focus-visible]:ring-2 data-[focus-visible]:ring-ring",
-  "data-[hovered]:bg-card/70 data-[hovered]:text-foreground data-[pressed]:bg-card",
-]
-
-/*
- * Collapse motion follows shadcn's sidebar: one unified 200ms ease-linear
- * clock. The aside's width clips a fixed-width inner column, so row copy is
- * swept under the clip edge rather than animated separately; only the brand,
- * the toggles, and groups cross-fade — all on the same clock. Nothing
- * unmounts and rows keep constant geometry, so icons never shift.
- */
-const nestFade = (hidden: boolean) =>
-  cn("transition-opacity duration-200 ease-linear", hidden && "opacity-0")
-
-const nestSlide = cn(
-  "transition-[width] duration-280 ease-cubic-bezier(0.34,1.4,0.64,1)",
-)
-
-/* Row trimmings (shortcut hints, detail stats) that fade out when the nest
- * collapses — CSS-only via the group flag, so rows never re-render. */
-const nestCollapseFade = cn(
-  "transition-opacity duration-200 ease-linear",
-  "group-data-collapsed/nest:opacity-0",
-)
-
-/* Shared chrome for NestLink and NestChat rows. */
-const nestRow = cn(
-  "relative z-10 flex h-8 w-full min-w-0 shrink-0 items-center overflow-hidden rounded-lg px-2 text-sm text-foreground/80 transition-colors",
-  "outline-none data-focus-visible:ring-2 data-focus-visible:ring-ring",
-  "data-hovered:text-foreground data-pressed:bg-card/80",
-  "data-disabled:pointer-events-none data-disabled:opacity-50",
-)
+/* Collapse motion and the shared row/chrome rules live in nest.module.css. */
+const nestFade = (hidden: boolean) => clsx(styles.fade, hidden && styles.faded)
 
 interface NestProviderProps {
   defaultCollapsed?: boolean
@@ -124,12 +92,7 @@ function Nest({
     <NestContext.Provider value={value}>
       <aside
         data-collapsed={value.collapsed || undefined}
-        className={cn(
-          "group/nest flex flex-col",
-          value.collapsed ? "w-14" : "w-50",
-          nestSlide,
-          className,
-        )}
+        className={clsx(styles.nest, className)}
         {...props}
       >
         {children}
@@ -160,27 +123,18 @@ function NestHead({
   const { collapsed } = useNest()
   return (
     <div
-      className={cn(
-        "relative flex w-full min-w-0 shrink-0 items-center overflow-hidden py-2",
-        icon != null || label != null
-          ? "px-4"
-          : "justify-around gap-1 px-1 [&_svg]:max-w-24 [&_svg]:min-w-12",
+      className={clsx(
+        styles.head,
+        icon != null || label != null ? styles.headIconic : styles.headCustom,
         className,
       )}
       {...props}
     >
-      {icon != null ? (
-        <span className="flex size-6 shrink-0 items-center justify-center">
-          {icon}
-        </span>
-      ) : null}
+      {icon != null ? <span className={styles.headIcon}>{icon}</span> : null}
       {label != null ? (
         <span
           aria-hidden={collapsed || undefined}
-          className={cn(
-            "ml-1.5 min-w-0 flex-1 truncate font-display text-sm",
-            nestFade(collapsed),
-          )}
+          className={clsx(styles.headLabel, nestFade(collapsed))}
         >
           {label}
         </span>
@@ -205,7 +159,7 @@ function NestToggle({ className, ...props }: NestToggleProps) {
     <AriaButton
       aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
       onPress={() => setCollapsed(!collapsed)}
-      className={cn(chromeButton, "size-8 text-fern-800", className)}
+      className={clsx(styles.chromeButton, styles.toggle, className)}
       {...props}
     >
       <HugeiconsIcon icon={SidebarLeftIcon} size={20} />
@@ -284,20 +238,16 @@ function NestGroup({
   return (
     <div
       inert={hidden || undefined}
-      className={cn(
-        title && "mt-3 flex min-h-0 flex-1 flex-col",
-        nestFade(hidden),
-        className,
-      )}
+      className={clsx(title && styles.groupTitled, nestFade(hidden), className)}
     >
       {title ? (
-        <div className="relative mx-2 mb-1 h-8 shrink-0">
+        <div className={styles.groupBar}>
           {searching ? (
-            <div className="absolute inset-0 flex items-center rounded-lg border border-driftwood-50/50 bg-card/60 backdrop-blur-xl">
+            <div className={styles.search}>
               <HugeiconsIcon
                 icon={Search01Icon}
                 size={14}
-                className="ml-2 shrink-0 text-muted-foreground"
+                className={styles.searchIcon}
               />
               <input
                 ref={inputRef}
@@ -308,12 +258,12 @@ function NestGroup({
                   if (event.key === "Escape") closeSearch()
                 }}
                 placeholder={`Search ${title.toLowerCase()}`}
-                className="ml-1.5 min-w-0 flex-1 bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
+                className={styles.searchInput}
               />
               <AriaButton
                 aria-label="Close search"
                 onPress={closeSearch}
-                className={cn(chromeButton, "size-8")}
+                className={styles.chromeButton}
               >
                 <HugeiconsIcon icon={Cancel01Icon} size={14} />
               </AriaButton>
@@ -324,20 +274,13 @@ function NestGroup({
                 aria-expanded={open}
                 aria-controls={open ? panelId : undefined}
                 onPress={() => setOpen(!open)}
-                className={cn(
-                  "absolute inset-y-0 left-0 flex items-center gap-1 rounded-lg px-2 text-xs font-medium text-muted-foreground",
-                  "outline-none data-[focus-visible]:ring-2 data-[focus-visible]:ring-ring",
-                  "data-[hovered]:text-foreground",
-                )}
+                className={styles.groupToggle}
               >
                 {title}
                 <HugeiconsIcon
                   icon={ArrowRight01Icon}
                   size={12}
-                  className={cn(
-                    "transition-transform duration-200",
-                    open && "rotate-90",
-                  )}
+                  className={clsx(styles.chevron, open && styles.chevronOpen)}
                 />
               </AriaButton>
               {searchable ? (
@@ -347,7 +290,7 @@ function NestGroup({
                     setSearching(true)
                     setOpen(true)
                   }}
-                  className={cn(chromeButton, "absolute right-0 top-0 size-8")}
+                  className={clsx(styles.chromeButton, styles.searchOpen)}
                 >
                   <HugeiconsIcon icon={Search01Icon} size={14} />
                 </AriaButton>
@@ -359,7 +302,7 @@ function NestGroup({
       {open ? (
         <div
           id={title ? panelId : undefined}
-          className={cn(title && "min-h-0 flex-1 overflow-y-auto")}
+          className={clsx(title && styles.panelScroll)}
         >
           {/* biome-ignore lint/a11y/noStaticElementInteractions: mouse-only decorative highlight; rows keep their own focus states */}
           {/* biome-ignore lint/a11y/noNoninteractiveElementInteractions: mouse-only decorative highlight; rows keep their own focus states */}
@@ -368,15 +311,11 @@ function NestGroup({
             ref={listRef}
             onMouseOver={handleMouseOver}
             onMouseLeave={() => setGliding(false)}
-            className="relative flex flex-col gap-px px-2"
+            className={styles.list}
           >
             <span
               aria-hidden="true"
-              className={cn(
-                "pointer-events-none absolute inset-x-2 z-0 rounded-lg bg-card/70",
-                "transition-[transform,height,opacity] duration-200",
-                gliding ? "opacity-100" : "opacity-0",
-              )}
+              className={clsx(styles.glide, gliding && styles.gliding)}
               style={
                 glide
                   ? {
@@ -434,32 +373,18 @@ function NestLink({
     <AriaButton
       data-nest-row
       aria-label={label || undefined}
-      className={cn(nestRow, className)}
+      className={clsx(styles.row, className)}
       {...props}
     >
-      <span className="flex size-6 shrink-0 items-center justify-center text-muted-foreground">
-        {icon}
-      </span>
-      <span className="ml-1.5 min-w-0 flex-1 truncate text-left">
-        {children}
-      </span>
+      <span className={styles.rowIcon}>{icon}</span>
+      <span className={styles.rowLabel}>{children}</span>
       {detail != null ? (
-        <span
-          className={cn(
-            "ml-2 shrink-0 text-xs font-medium tabular-nums text-muted-foreground",
-            nestCollapseFade,
-          )}
-        >
+        <span className={clsx(styles.rowDetail, styles.collapseFade)}>
           {detail}
         </span>
       ) : null}
       {shortcut ? (
-        <kbd
-          className={cn(
-            "ml-2 shrink-0 rounded border border-driftwood-50/50 bg-card/60 px-1 font-sans text-[10px] text-muted-foreground",
-            nestCollapseFade,
-          )}
-        >
+        <kbd className={clsx(styles.rowShortcut, styles.collapseFade)}>
           {shortcut}
         </kbd>
       ) : null}
@@ -498,10 +423,10 @@ function NestChat({
       data-nest-row
       aria-label={label || undefined}
       isDisabled={collapsed || isDisabled}
-      className={cn(nestRow, nestCollapseFade, className)}
+      className={clsx(styles.row, styles.collapseFade, className)}
       {...props}
     >
-      <span className="min-w-0 flex-1 truncate text-left">{children}</span>
+      <span className={styles.chatLabel}>{children}</span>
     </AriaButton>
   )
 }

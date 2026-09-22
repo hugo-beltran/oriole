@@ -1,0 +1,122 @@
+/* Select — trigger, popover, list and items styled over react-aria's data
+   attributes, with a short fade on the popover. */
+/* Component rules live in the `components` cascade layer (see
+   styles/global.css) so any unlayered consumer class wins by cascade order.
+   The statement pins `base` below `components` even when this module is
+   parsed before global.css, so the reset never beats a component rule. */
+@layer base, components;
+
+@layer components {
+  .select {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+  }
+
+  .trigger {
+    align-items: center;
+    background-color: var(--or-background);
+    border: 1px solid var(--or-input);
+    border-radius: calc(var(--or-radius) - 0.125rem);
+    display: flex;
+    font-size: 0.875rem;
+    gap: 0.5rem;
+    height: 2.25rem;
+    justify-content: space-between;
+    line-height: 1.25rem;
+    outline: none;
+    padding: 0.5rem 0.75rem;
+    width: 100%;
+
+    &[data-focus-visible] {
+      box-shadow:
+        0 0 0 2px var(--or-background),
+        0 0 0 4px var(--or-ring);
+    }
+
+    &[data-hovered] {
+      background-color: color-mix(in oklab, var(--or-accent) 50%, transparent);
+    }
+
+    &[data-disabled] {
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+
+    > [data-placeholder] {
+      color: var(--or-muted-foreground);
+    }
+  }
+
+  .chevron {
+    height: 1rem;
+    opacity: 0.5;
+    width: 1rem;
+  }
+
+  .content {
+    background-color: var(--or-popover);
+    border: 1px solid var(--or-border);
+    border-radius: calc(var(--or-radius) - 0.125rem);
+    box-shadow:
+      0 4px 6px -1px rgb(0 0 0 / 0.1),
+      0 2px 4px -2px rgb(0 0 0 / 0.1);
+    color: var(--or-popover-foreground);
+    min-width: var(--trigger-width);
+    overflow: auto;
+    padding: 0.25rem;
+
+    &[data-entering] {
+      animation: fadeIn 150ms ease-out;
+    }
+
+    &[data-exiting] {
+      animation: fadeOut 150ms ease-in;
+    }
+  }
+
+  .list {
+    outline: none;
+  }
+
+  .item {
+    align-items: center;
+    border-radius: calc(var(--or-radius) - 0.25rem);
+    cursor: default;
+    display: flex;
+    font-size: 0.875rem;
+    gap: 0.5rem;
+    justify-content: space-between;
+    line-height: 1.25rem;
+    outline: none;
+    padding: 0.375rem 0.5rem;
+    user-select: none;
+
+    &[data-focused] {
+      background-color: var(--or-accent);
+      color: var(--or-accent-foreground);
+    }
+
+    &[data-disabled] {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+  }
+
+  .check {
+    height: 1rem;
+    width: 1rem;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+  }
+}

@@ -23,7 +23,7 @@ jobs:
       - uses: actions/checkout@v5
       - uses: oven-sh/setup-bun@v2
       - run: bun install --frozen-lockfile
-      - run: bun run build:showcase
+      - run: bun run build
       # SPA fallback: GitHub Pages serves 404.html for unknown paths,
       # letting deep links into router routes load the app.
       - run: cp showcase/dist/index.html showcase/dist/404.html

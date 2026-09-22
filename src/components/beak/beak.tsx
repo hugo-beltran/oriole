@@ -10,6 +10,7 @@ import {
   Tick02Icon,
 } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
+import { clsx } from "clsx"
 import {
   type ReactNode,
   type Ref,
@@ -18,8 +19,7 @@ import {
   useRef,
   useState,
 } from "react"
-
-import { cn } from "../../lib/utils.js"
+import styles from "./beak.module.css"
 
 interface BeakItem {
   id: string
@@ -75,24 +75,6 @@ function parseToken(
     start: match.index + lead.length,
   }
 }
-
-const GLIDE =
-  "top 220ms cubic-bezier(0.23,1,0.32,1), height 220ms cubic-bezier(0.23,1,0.32,1), opacity 150ms ease"
-
-const POP_IN = {
-  animation: "or-pop-in 180ms cubic-bezier(0.23,1,0.32,1) both",
-} as const
-
-const iconButton = cn(
-  "flex size-7 shrink-0 items-center justify-center text-muted-foreground",
-  "transition-[background-color,color,transform] duration-150",
-  "outline-none focus-visible:ring-2 focus-visible:ring-ring",
-  "hover:bg-accent hover:text-foreground active:scale-[0.94]",
-)
-
-const menuSurface = cn(
-  "rounded-[10px] border border-border bg-popover p-1 text-popover-foreground shadow-md",
-)
 
 /**
  * Beak — the prompt bar: where the chirps come from. A compact composer with
@@ -324,34 +306,34 @@ function Beak({
   }
 
   return (
-    <div ref={ref} data-beak className={cn("w-full", className)}>
+    <div
+      ref={ref}
+      data-beak
+      className={clsx(styles.beak, pill && styles.pill, className)}
+    >
       {/* the composer is the anchor — menus grow up from its top edge */}
-      <div ref={anchorRef} className="relative">
+      <div ref={anchorRef} className={styles.anchor}>
         {/* ── @ / slash menu ─────────────────────────────── */}
         {menuOpen && (
           <div
-            className={cn(
-              "absolute inset-x-0 bottom-full z-10 mb-2",
-              menuSurface,
-            )}
-            style={{ ...POP_IN, transformOrigin: "bottom center" }}
+            className={clsx(styles.tokenMenu, styles.menuSurface, styles.popIn)}
+            style={{ transformOrigin: "bottom center" }}
           >
             {rows.length > 0 ? (
               <div
                 role="listbox"
                 aria-label={menu === "at" ? "Sources" : "Commands"}
                 onMouseLeave={() => setEngaged(false)}
-                className="relative"
+                className={styles.list}
               >
                 {/* single gliding highlight — appears once a row is engaged */}
                 <span
                   aria-hidden
-                  className="pointer-events-none absolute inset-x-0 rounded-md bg-driftwood-100/80"
+                  className={styles.glide}
                   style={{
                     top: rowBox?.top ?? 0,
                     height: rowBox?.height ?? 0,
                     opacity: rowBox && engaged ? 1 : 0,
-                    transition: GLIDE,
                   }}
                 />
                 {rows.map((row, index) => (
@@ -369,28 +351,24 @@ function Beak({
                       setEngaged(true)
                     }}
                     onClick={() => pick(row)}
-                    className="relative z-10 flex h-9 w-full items-center gap-2.5 rounded-md px-2 text-left outline-none"
+                    className={styles.row}
                   >
                     {row.icon && (
-                      <span className="flex size-5.5 shrink-0 items-center justify-center text-foreground/70">
-                        {row.icon}
-                      </span>
+                      <span className={styles.rowIcon}>{row.icon}</span>
                     )}
-                    <span className="shrink-0 text-[12.5px] font-medium text-foreground">
+                    <span className={styles.rowLabel}>
                       {menu === "slash" ? `/${row.label}` : row.label}
                     </span>
-                    <span className="min-w-0 flex-1 truncate text-xs text-muted-foreground">
+                    <span className={styles.rowDescription}>
                       {row.description}
                     </span>
                   </button>
                 ))}
               </div>
             ) : (
-              <div className="flex h-9 items-center px-2 text-xs text-muted-foreground">
-                No matches for “{query}”
-              </div>
+              <div className={styles.empty}>No matches for “{query}”</div>
             )}
-            <div className="mt-1 border-t border-border px-2 pt-1.5 pb-1 text-[11px] text-muted-foreground">
+            <div className={styles.hint}>
               {menu === "at"
                 ? "Type to search sources & files"
                 : "Type to search commands"}
@@ -401,11 +379,10 @@ function Beak({
         {/* ── model menu ─────────────────────────────────── */}
         {modelOpen && models && (
           <div
-            className={cn("absolute z-10 w-44", menuSurface)}
+            className={clsx(styles.modelMenu, styles.menuSurface, styles.popIn)}
             style={{
               left: modelMenu.left,
               bottom: modelMenu.bottom,
-              ...POP_IN,
               transformOrigin: "bottom left",
             }}
           >
@@ -413,16 +390,15 @@ function Beak({
               role="listbox"
               aria-label="Models"
               onMouseLeave={() => setModelHovered(null)}
-              className="relative"
+              className={styles.list}
             >
               <span
                 aria-hidden
-                className="pointer-events-none absolute inset-x-0 rounded-md bg-driftwood-100/80"
+                className={styles.glide}
                 style={{
                   top: modelBox?.top ?? 0,
                   height: modelBox?.height ?? 0,
                   opacity: modelBox && modelHovered !== null ? 1 : 0,
-                  transition: GLIDE,
                 }}
               />
               {models.map((candidate, index) => (
@@ -437,18 +413,14 @@ function Beak({
                   onMouseDown={(event) => event.preventDefault()}
                   onMouseEnter={() => setModelHovered(index)}
                   onClick={() => selectModel(candidate)}
-                  className="relative z-10 flex h-7.5 w-full items-center gap-2 rounded-md px-2 text-left outline-none"
+                  className={styles.modelRow}
                 >
-                  <span className="min-w-0 flex-1 truncate text-[12.5px] font-medium text-foreground">
-                    {candidate.label}
-                  </span>
-                  <span className="shrink-0 text-[11px] text-muted-foreground">
-                    {candidate.tag}
-                  </span>
+                  <span className={styles.modelLabel}>{candidate.label}</span>
+                  <span className={styles.modelTag}>{candidate.tag}</span>
                   <span
-                    className={cn(
-                      "shrink-0 text-foreground",
-                      candidate.id !== model?.id && "invisible",
+                    className={clsx(
+                      styles.modelCheck,
+                      candidate.id !== model?.id && styles.hidden,
                     )}
                   >
                     <HugeiconsIcon
@@ -465,54 +437,32 @@ function Beak({
 
         {/* ── composer ───────────────────────────────────── */}
         <div
-          className={cn(
-            "relative isolate flex flex-col gap-1.5 overflow-hidden border border-input bg-background p-1.5 shadow-xs",
-            "transition-[border-color,border-radius] duration-150 focus-within:border-driftwood-400",
-            pill
-              ? attachments.length > 0 || expanded
-                ? "rounded-3xl"
-                : "rounded-full"
-              : "rounded-[14px]",
-            isDisabled && "pointer-events-none opacity-50",
+          className={clsx(
+            styles.composer,
+            (attachments.length > 0 || expanded) && styles.grown,
+            isDisabled && styles.disabled,
           )}
         >
           {/* mirrors the draft so wrapping can be detected before it happens */}
-          <span
-            ref={measureRef}
-            aria-hidden
-            className="pointer-events-none invisible absolute whitespace-pre text-[13px] leading-[18px]"
-          >
+          <span ref={measureRef} aria-hidden className={styles.measure}>
             {draft}
           </span>
 
           {attachments.length > 0 && (
-            <div
-              className={cn(
-                "flex flex-wrap gap-1.5 pt-0.5",
-                pill ? "px-1" : "px-0.5",
-              )}
-            >
+            <div className={styles.attachments}>
               {attachments.map((file, index) => (
                 <span
                   // biome-ignore lint/suspicious/noArrayIndexKey: attachments are positional — removal is by index and names may repeat
                   key={`${file}-${index}`}
-                  className={cn(
-                    "flex h-6.5 items-center gap-1.5 bg-muted py-1 pr-1 pl-1.5 text-[11.5px] text-foreground/70 shadow-xs",
-                    pill ? "rounded-full" : "rounded-md",
-                  )}
-                  style={POP_IN}
+                  className={clsx(styles.chip, styles.popIn)}
                 >
                   <HugeiconsIcon icon={File01Icon} size={12} />
-                  <span className="max-w-36 truncate">{file}</span>
+                  <span className={styles.chipName}>{file}</span>
                   <button
                     type="button"
                     aria-label={`Remove ${file}`}
                     onClick={() => onAttachmentRemove?.(index)}
-                    className={cn(
-                      "-my-1 flex size-6 items-center justify-center text-muted-foreground outline-none transition-colors duration-100",
-                      "hover:bg-border/70 hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring",
-                      pill ? "rounded-full" : "rounded-sm",
-                    )}
+                    className={styles.chipRemove}
                   >
                     <HugeiconsIcon
                       icon={Cancel01Icon}
@@ -525,10 +475,7 @@ function Beak({
             </div>
           )}
 
-          <div
-            ref={controlsRef}
-            className="flex flex-wrap items-end gap-x-1 gap-y-1.5"
-          >
+          <div ref={controlsRef} className={styles.controls}>
             {(sources?.length ?? 0) > 0 && (
               <button
                 type="button"
@@ -539,11 +486,10 @@ function Beak({
                   setPlusOpen((current) => !current)
                   inputRef.current?.focus()
                 }}
-                className={cn(
-                  "order-1",
-                  iconButton,
-                  pill ? "rounded-full" : "rounded-lg",
-                  plusOpen && "bg-accent text-foreground",
+                className={clsx(
+                  styles.iconButton,
+                  styles.plus,
+                  plusOpen && styles.engaged,
                 )}
               >
                 <HugeiconsIcon icon={Add01Icon} size={16} strokeWidth={2} />
@@ -600,11 +546,7 @@ function Beak({
               }}
               placeholder={listening ? "Listening…" : placeholder}
               aria-label="Prompt"
-              className={cn(
-                "order-2 min-h-7 w-auto min-w-0 grow basis-0 resize-none bg-transparent px-1 py-[5px]",
-                "text-[13px] leading-[18px] text-foreground outline-none [overflow-wrap:anywhere] placeholder:text-muted-foreground",
-                expanded && "order-first basis-full",
-              )}
+              className={clsx(styles.input, expanded && styles.inputExpanded)}
             />
 
             {/* model picker */}
@@ -618,14 +560,10 @@ function Beak({
                   setPlusOpen(false)
                   setModelOpen((current) => !current)
                 }}
-                className={cn(
-                  "order-3 flex h-7 shrink-0 items-center gap-1 px-1.5 text-xs font-medium text-foreground/70",
-                  "outline-none transition-colors duration-150 hover:bg-accent hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring",
-                  pill ? "rounded-full" : "rounded-lg",
-                )}
+                className={styles.modelTrigger}
               >
                 {model.label}
-                <span className="text-muted-foreground">
+                <span className={styles.modelCaret}>
                   <HugeiconsIcon
                     icon={ArrowDown01Icon}
                     size={11}
@@ -642,24 +580,20 @@ function Beak({
                 aria-label={listening ? "Stop dictation" : "Start dictation"}
                 aria-pressed={listening}
                 onClick={dictate}
-                className={cn(
-                  "order-4",
-                  iconButton,
-                  pill ? "rounded-full" : "rounded-lg",
-                  expanded && "ml-auto",
-                  listening &&
-                    "bg-fern-100 text-fern-800 hover:bg-fern-100 hover:text-fern-800",
+                className={clsx(
+                  styles.iconButton,
+                  styles.mic,
+                  expanded && styles.pushRight,
+                  listening && styles.listening,
                 )}
               >
                 {listening ? (
-                  <span className="flex h-3.5 items-center gap-[2.5px]">
+                  <span className={styles.eq}>
                     {[0, 1, 2].map((bar) => (
                       <span
                         key={bar}
-                        className="h-full w-[2.5px] rounded-full bg-current"
-                        style={{
-                          animation: `or-eq-bounce 900ms ease-in-out ${bar * 150}ms infinite`,
-                        }}
+                        className={styles.eqBar}
+                        style={{ animationDelay: `${bar * 150}ms` }}
                       />
                     ))}
                   </span>
@@ -675,15 +609,10 @@ function Beak({
               aria-label="Send"
               disabled={!canSend}
               onClick={send}
-              className={cn(
-                "order-5 flex size-7 shrink-0 items-center justify-center",
-                "outline-none transition-[background-color,color,transform] duration-200",
-                "enabled:active:scale-[0.94] focus-visible:ring-2 focus-visible:ring-ring",
-                pill ? "rounded-full" : "rounded-lg",
-                expanded && !onDictate && "ml-auto",
-                canSend
-                  ? "bg-primary text-primary-foreground hover:bg-primary/90"
-                  : "bg-muted text-muted-foreground",
+              className={clsx(
+                styles.send,
+                expanded && !onDictate && styles.pushRight,
+                canSend ? styles.sendReady : styles.sendIdle,
               )}
             >
               <HugeiconsIcon icon={ArrowUp02Icon} size={16} strokeWidth={2.4} />

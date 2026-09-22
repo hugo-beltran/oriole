@@ -1,0 +1,133 @@
+/* Button. Interaction states are React Aria data attributes; tinted hover
+   and pressed fills are color-mix over the tokens. */
+/* Component rules live in the `components` cascade layer (see
+   styles/global.css) so any unlayered consumer class wins by cascade order.
+   The statement pins `base` below `components` even when this module is
+   parsed before global.css, so the reset never beats a component rule. */
+@layer base, components;
+
+@layer components {
+  .button {
+    align-items: center;
+    border-radius: calc(var(--or-radius) - 0.125rem);
+    display: inline-flex;
+    font-size: 0.875rem;
+    font-weight: 500;
+    gap: 0.5rem;
+    justify-content: center;
+    line-height: 1.25rem;
+    outline: none;
+    transition-duration: 150ms;
+    transition-property:
+      color, background-color, border-color, outline-color,
+      text-decoration-color, fill, stroke;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    white-space: nowrap;
+
+    &[data-focus-visible] {
+      box-shadow:
+        0 0 0 2px var(--or-background),
+        0 0 0 4px var(--or-ring);
+    }
+
+    &[data-disabled] {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+  }
+
+  /* variant */
+  .default {
+    background-color: var(--or-primary);
+    color: var(--or-primary-foreground);
+
+    &[data-hovered] {
+      background-color: color-mix(in oklab, var(--or-primary) 90%, transparent);
+    }
+    &[data-pressed] {
+      background-color: color-mix(in oklab, var(--or-primary) 80%, transparent);
+    }
+  }
+
+  .secondary {
+    background-color: var(--or-secondary);
+    color: var(--or-secondary-foreground);
+
+    &[data-hovered] {
+      background-color: color-mix(
+        in oklab,
+        var(--or-secondary) 80%,
+        transparent
+      );
+    }
+    &[data-pressed] {
+      background-color: color-mix(
+        in oklab,
+        var(--or-secondary) 70%,
+        transparent
+      );
+    }
+  }
+
+  .outline {
+    background-color: var(--or-background);
+    border: 1px solid var(--or-input);
+
+    &[data-hovered] {
+      background-color: var(--or-accent);
+      color: var(--or-accent-foreground);
+    }
+    &[data-pressed] {
+      background-color: color-mix(in oklab, var(--or-accent) 80%, transparent);
+    }
+  }
+
+  .ghost {
+    &[data-hovered] {
+      background-color: var(--or-accent);
+      color: var(--or-accent-foreground);
+    }
+    &[data-pressed] {
+      background-color: color-mix(in oklab, var(--or-accent) 80%, transparent);
+    }
+  }
+
+  .destructive {
+    background-color: var(--or-destructive);
+    color: var(--or-destructive-foreground);
+
+    &[data-hovered] {
+      background-color: oklch(from var(--or-destructive) 45% 60% h);
+    }
+    &[data-pressed] {
+      background-color: color-mix(
+        in oklab,
+        var(--or-destructive) 80%,
+        transparent
+      );
+    }
+  }
+
+  /* size */
+  .sm {
+    font-size: 0.75rem;
+    height: 2rem;
+    line-height: 1rem;
+    padding-inline: 0.75rem;
+  }
+
+  .md {
+    height: 2.25rem;
+    padding-inline: 1rem;
+  }
+
+  .lg {
+    height: 2.5rem;
+    padding-inline: 1.5rem;
+  }
+
+  .icon {
+    height: 2.25rem;
+    width: 2.25rem;
+  }
+}

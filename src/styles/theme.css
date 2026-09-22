@@ -1,13 +1,9 @@
 /*
- * Oriole brand tokens.
+ * Oriole brand tokens — tokens only; component rules live in each
+ * component's co-located *.module.css and the reset in global.css.
  *
- * Consumers re-brand by redefining the --or-* custom properties — in :root,
- * a .dark scope, or any subtree. No Tailwind rebuild of the library required.
- *
- * Consumer wiring (in the app's main CSS):
- *   @import "tailwindcss";
- *   @import "@mycodemedia/oriole/theme.css";
- *   @source "../node_modules/@mycodemedia/oriole/dist";
+ * Re-brand by redefining the --or-* custom properties — in :root, a .dark
+ * scope, or any subtree. Imported by global.css.
  */
 
 /* Display face — Libre Baskerville, self-hosted via Fontsource (the package
@@ -15,60 +11,6 @@
 @import "@fontsource/libre-baskerville/400.css";
 @import "@fontsource/libre-baskerville/400-italic.css";
 @import "@fontsource/libre-baskerville/700.css";
-
-/* Mesh drift offsets and alphas — typed so the browser can interpolate them.
-   The gradient mesh adds the offsets to its literal blob positions and
-   scales each blob's color through its alpha; everything rests at the static
-   mesh (0% offset, 100% alpha) unless animate-mesh-drift runs. Browsers
-   without @property fall back to the static mesh via the var() fallbacks.
-   Three groups shared across blobs, each driven by its own animation with a
-   different period, so the layers float and fade out of phase with each
-   other — lava-lamp style — rather than in lockstep. */
-@property --or-mesh-drift-1-x {
-  syntax: "<percentage>";
-  inherits: false;
-  initial-value: 0%;
-}
-@property --or-mesh-drift-1-y {
-  syntax: "<percentage>";
-  inherits: false;
-  initial-value: 0%;
-}
-@property --or-mesh-drift-2-x {
-  syntax: "<percentage>";
-  inherits: false;
-  initial-value: 0%;
-}
-@property --or-mesh-drift-2-y {
-  syntax: "<percentage>";
-  inherits: false;
-  initial-value: 0%;
-}
-@property --or-mesh-drift-3-x {
-  syntax: "<percentage>";
-  inherits: false;
-  initial-value: 0%;
-}
-@property --or-mesh-drift-3-y {
-  syntax: "<percentage>";
-  inherits: false;
-  initial-value: 0%;
-}
-@property --or-mesh-alpha-1 {
-  syntax: "<percentage>";
-  inherits: false;
-  initial-value: 100%;
-}
-@property --or-mesh-alpha-2 {
-  syntax: "<percentage>";
-  inherits: false;
-  initial-value: 100%;
-}
-@property --or-mesh-alpha-3 {
-  syntax: "<percentage>";
-  inherits: false;
-  initial-value: 100%;
-}
 
 :root {
   /* Nectarine brand ramp. Tints seeded from vivid orange references —
@@ -88,21 +30,22 @@
   --or-nectarine-900: oklch(38% 0.0674 359.59);
   --or-nectarine-950: oklch(26% 0.062 353.05);
 
-  /* Fern ramp, seeded at the 700 slot (the old fern-ash green). The mirror
-     of nectarine: tints hold a fresh green (hue near-static 124→128 through
-     200) and the shades carry the motion, sweeping green → teal → petrol to
-     188 at the dark end. */
-  --or-fern-50: oklch(96% 0.015 124);
-  --or-fern-100: oklch(90% 0.019 125.73);
-  --or-fern-200: oklch(83% 0.03 127.93);
-  --or-fern-300: oklch(79% 0.043 130.72);
-  --or-fern-400: oklch(73% 0.054 134.28);
-  --or-fern-500: oklch(65% 0.058 138.8);
-  --or-fern-600: oklch(56% 0.057 144.55);
-  --or-fern-700: oklch(49.22% 0.0534 151.85);
-  --or-fern-800: oklch(44% 0.048 161.15);
-  --or-fern-900: oklch(38% 0.041 173);
-  --or-fern-950: oklch(26% 0.034 188);
+  /* Fern ramp, tuned from Juniper's needle ramp: a fuller green than the
+     first cut, chroma peaking at 0.1037 at the 400 slot. Hue holds a fresh
+     green through the tints (121 → 130) and sweeps toward teal in the
+     shades (142 → 171 at the dark end). Lightness sits slightly off the
+     shared ladder, the 700 slot pinned at 46.11%. */
+  --or-fern-50: oklch(95.75% 0.0171 121.4);
+  --or-fern-100: oklch(91.5% 0.0362 122.66);
+  --or-fern-200: oklch(87% 0.0772 124.08);
+  --or-fern-300: oklch(80.5% 0.0938 126.35);
+  --or-fern-400: oklch(72.5% 0.1037 130.2);
+  --or-fern-500: oklch(63% 0.0979 134.38);
+  --or-fern-600: oklch(54% 0.0874 138.34);
+  --or-fern-700: oklch(46.11% 0.0739 142.85);
+  --or-fern-800: oklch(39.5% 0.0599 152.6);
+  --or-fern-900: oklch(33% 0.0484 161.95);
+  --or-fern-950: oklch(25% 0.0424 171.1);
 
   /* Driftwood ramp, the muted neutral for discrete elements (borders, muted
      text, quiet surfaces). Inverted chroma: tints are near-gray so light
@@ -121,7 +64,7 @@
   --or-driftwood-950: oklch(26% 0.02 58);
 
   /* Plum ramp, the accent — foxglove's successor, dialed back into fern's
-     register: chroma peaks at 0.076 at the 500 slot (~1.3× fern's 0.058),
+     register: chroma peaks at 0.076 at the 500 slot (well under fern's 0.104),
      so the purple reads structural rather than emphatic. Keeps foxglove's
      geometric hue sweep (330.55 → 299.92, motion accelerating into the
      shades). */
@@ -140,8 +83,8 @@
   /* Berry ramp, the cold formal blue — seeded from juniper berries. Hue is
      distributed perfectly evenly, 236 (frost) → 278 (berry violet) at
      4.2°/step. Chroma: smoothstep 0.018 → 0.078 peaking at 700, cosine
-     relax to 0.067 at 950 — a register between plum's 0.076 and fern's
-     0.058 so the blue carries weight without shouting. The 700 slot sits
+     relax to 0.067 at 950 — a register near plum's 0.076, quieter than fern's
+     0.104, so the blue carries weight without shouting. The 700 slot sits
      at 48.18% lightness (off-ladder, like fern's ash pin): at the ladder's
      50% the cold hue leaves 700-on-100 text at 4.50:1 borderline; the pin
      lifts it to 4.87:1. The dark end is the formal register — 950 on 100
@@ -167,13 +110,12 @@
   --or-popover: oklch(1 0 0);
   --or-popover-foreground: oklch(0.145 0 0);
 
-  /* light text: near-black on plum-600 lands at 4.1:1, under the 4.5:1
-     normal-text minimum; near-white clears it at 4.6:1 */
-  --or-primary: var(--or-plum-600);
+  /* update: near-black on fern-700 (oklch(50% 0.104 142)) has a contrast of 4.5:1—now meets the normal-text minimum; near-white boosts to 7.1:1 */
+  --or-primary: var(--or-fern-600);
   --or-primary-foreground: oklch(0.985 0 0);
 
-  --or-secondary: oklch(0.97 0 0);
-  --or-secondary-foreground: oklch(0.205 0 0);
+  --or-secondary: oklch(from var(--or-fern-200) 86% 10% h);
+  --or-secondary-foreground: var(--or-berry-950);
 
   --or-muted: oklch(0.97 0 0);
   --or-muted-foreground: oklch(0.556 0 0);
@@ -181,7 +123,7 @@
   --or-accent: oklch(0.97 0 0);
   --or-accent-foreground: oklch(0.205 0 0);
 
-  --or-destructive: oklch(0.577 0.245 27.325);
+  --or-destructive: oklch(from var(--or-nectarine-600) l 50% h);
   --or-destructive-foreground: oklch(0.985 0 0);
 
   --or-border: oklch(0.922 0 0);
@@ -225,278 +167,4 @@
   --or-border: oklch(1 0 0 / 10%);
   --or-input: oklch(1 0 0 / 15%);
   --or-ring: var(--or-nectarine-400);
-}
-
-@theme inline {
-  --color-nectarine-50: var(--or-nectarine-50);
-  --color-nectarine-100: var(--or-nectarine-100);
-  --color-nectarine-200: var(--or-nectarine-200);
-  --color-nectarine-300: var(--or-nectarine-300);
-  --color-nectarine-400: var(--or-nectarine-400);
-  --color-nectarine-500: var(--or-nectarine-500);
-  --color-nectarine-600: var(--or-nectarine-600);
-  --color-nectarine-700: var(--or-nectarine-700);
-  --color-nectarine-800: var(--or-nectarine-800);
-  --color-nectarine-900: var(--or-nectarine-900);
-  --color-nectarine-950: var(--or-nectarine-950);
-
-  --color-fern-50: var(--or-fern-50);
-  --color-fern-100: var(--or-fern-100);
-  --color-fern-200: var(--or-fern-200);
-  --color-fern-300: var(--or-fern-300);
-  --color-fern-400: var(--or-fern-400);
-  --color-fern-500: var(--or-fern-500);
-  --color-fern-600: var(--or-fern-600);
-  --color-fern-700: var(--or-fern-700);
-  --color-fern-800: var(--or-fern-800);
-  --color-fern-900: var(--or-fern-900);
-  --color-fern-950: var(--or-fern-950);
-
-  --color-driftwood-50: var(--or-driftwood-50);
-  --color-driftwood-100: var(--or-driftwood-100);
-  --color-driftwood-200: var(--or-driftwood-200);
-  --color-driftwood-300: var(--or-driftwood-300);
-  --color-driftwood-400: var(--or-driftwood-400);
-  --color-driftwood-500: var(--or-driftwood-500);
-  --color-driftwood-600: var(--or-driftwood-600);
-  --color-driftwood-700: var(--or-driftwood-700);
-  --color-driftwood-800: var(--or-driftwood-800);
-  --color-driftwood-900: var(--or-driftwood-900);
-  --color-driftwood-950: var(--or-driftwood-950);
-
-  --color-plum-50: var(--or-plum-50);
-  --color-plum-100: var(--or-plum-100);
-  --color-plum-200: var(--or-plum-200);
-  --color-plum-300: var(--or-plum-300);
-  --color-plum-400: var(--or-plum-400);
-  --color-plum-500: var(--or-plum-500);
-  --color-plum-600: var(--or-plum-600);
-  --color-plum-700: var(--or-plum-700);
-  --color-plum-800: var(--or-plum-800);
-  --color-plum-900: var(--or-plum-900);
-  --color-plum-950: var(--or-plum-950);
-
-  --color-berry-50: var(--or-berry-50);
-  --color-berry-100: var(--or-berry-100);
-  --color-berry-200: var(--or-berry-200);
-  --color-berry-300: var(--or-berry-300);
-  --color-berry-400: var(--or-berry-400);
-  --color-berry-500: var(--or-berry-500);
-  --color-berry-600: var(--or-berry-600);
-  --color-berry-700: var(--or-berry-700);
-  --color-berry-800: var(--or-berry-800);
-  --color-berry-900: var(--or-berry-900);
-  --color-berry-950: var(--or-berry-950);
-
-  --color-background: var(--or-background);
-  --color-foreground: var(--or-foreground);
-
-  --color-card: var(--or-card);
-  --color-card-foreground: var(--or-card-foreground);
-
-  --color-popover: var(--or-popover);
-  --color-popover-foreground: var(--or-popover-foreground);
-
-  --color-primary: var(--or-primary);
-  --color-primary-foreground: var(--or-primary-foreground);
-
-  --color-secondary: var(--or-secondary);
-  --color-secondary-foreground: var(--or-secondary-foreground);
-
-  --color-muted: var(--or-muted);
-  --color-muted-foreground: var(--or-muted-foreground);
-
-  --color-accent: var(--or-accent);
-  --color-accent-foreground: var(--or-accent-foreground);
-
-  --color-destructive: var(--or-destructive);
-  --color-destructive-foreground: var(--or-destructive-foreground);
-
-  --color-border: var(--or-border);
-  --color-input: var(--or-input);
-  --color-ring: var(--or-ring);
-
-  --radius-sm: calc(var(--or-radius) - 0.25rem);
-  --radius-md: calc(var(--or-radius) - 0.125rem);
-  --radius-lg: var(--or-radius);
-  --radius-xl: calc(var(--or-radius) + 0.25rem);
-
-  --font-display: var(--or-font-display);
-
-  /* Mesh blob positions are base + drift offset, and each blob's color is
-     scaled by its group's alpha (100% at rest, 60–100% while animating). The
-     first driftwood blob keeps a fixed corner anchor at full alpha so the
-     composition stays grounded while the other layers float. */
-  --background-image-lava-lamp:
-    radial-gradient(at 30% 0%, var(--or-driftwood-100) 0px, transparent 50%),
-    radial-gradient(
-      at calc(90% + var(--or-mesh-drift-1-x, 0%))
-        calc(-20% + var(--or-mesh-drift-1-y, 0%)),
-      color-mix(
-          in oklch,
-          var(--or-nectarine-100) var(--or-mesh-alpha-1, 100%),
-          transparent
-        )
-        0px,
-      transparent 50%
-    ),
-    radial-gradient(
-      at calc(3% + var(--or-mesh-drift-2-x, 0%))
-        calc(116% + var(--or-mesh-drift-2-y, 0%)),
-      color-mix(
-          in oklch,
-          var(--or-nectarine-300) var(--or-mesh-alpha-2, 100%),
-          transparent
-        )
-        200px,
-      transparent 50%
-    ),
-    radial-gradient(
-      at calc(65% + var(--or-mesh-drift-3-x, 0%))
-        calc(60% + var(--or-mesh-drift-3-y, 0%)),
-      color-mix(
-          in oklch,
-          var(--or-driftwood-200) var(--or-mesh-alpha-3, 100%),
-          transparent
-        )
-        0px,
-      transparent 50%
-    ),
-    radial-gradient(
-      at calc(100% + var(--or-mesh-drift-1-x, 0%))
-        calc(92% + var(--or-mesh-drift-1-y, 0%)),
-      color-mix(
-          in oklch,
-          var(--or-driftwood-300) var(--or-mesh-alpha-1, 100%),
-          transparent
-        )
-        0px,
-      transparent 50%
-    ),
-    radial-gradient(
-      at calc(25% + var(--or-mesh-drift-2-x, 0%))
-        calc(100% + var(--or-mesh-drift-2-y, 0%)),
-      color-mix(
-          in oklch,
-          var(--or-driftwood-200) var(--or-mesh-alpha-2, 100%),
-          transparent
-        )
-        0px,
-      transparent 50%
-    ),
-    radial-gradient(
-      at calc(55% + var(--or-mesh-drift-3-x, 0%))
-        calc(25% + var(--or-mesh-drift-3-y, 0%)),
-      color-mix(
-          in oklch,
-          var(--or-driftwood-50) var(--or-mesh-alpha-3, 100%),
-          transparent
-        )
-        0px,
-      transparent 50%
-    );
-
-  /* Lava-lamp float: one animation per blob group, each with its own period
-     (co-prime-ish durations so the phases never re-sync) and a negative
-     delay so they start already spread apart. Motion is y-dominant with a
-     small x sway; alpha breathes between 60% and 100%. alternate keeps every
-     loop seamless without the last keyframe having to return to 0. */
-  --animate-mesh-drift:
-    or-mesh-float-1 12s ease-in-out infinite alternate,
-    or-mesh-float-2 34s ease-in-out -10s infinite alternate,
-    or-mesh-float-3 27s ease-in-out -24s infinite alternate;
-
-  @keyframes or-mesh-float-1 {
-    0% {
-      --or-mesh-drift-1-x: 0%;
-      --or-mesh-drift-1-y: 0%;
-      --or-mesh-alpha-1: 100%;
-    }
-    35% {
-      --or-mesh-drift-1-x: 3%;
-      --or-mesh-drift-1-y: -14%;
-      --or-mesh-alpha-1: 68%;
-    }
-    65% {
-      --or-mesh-drift-1-x: -2%;
-      --or-mesh-drift-1-y: 8%;
-      --or-mesh-alpha-1: 92%;
-    }
-    100% {
-      --or-mesh-drift-1-x: 2%;
-      --or-mesh-drift-1-y: -20%;
-      --or-mesh-alpha-1: 60%;
-    }
-  }
-
-  @keyframes or-mesh-float-2 {
-    0% {
-      --or-mesh-drift-2-x: 0%;
-      --or-mesh-drift-2-y: 0%;
-      --or-mesh-alpha-2: 95%;
-    }
-    30% {
-      --or-mesh-drift-2-x: -3%;
-      --or-mesh-drift-2-y: 12%;
-      --or-mesh-alpha-2: 62%;
-    }
-    60% {
-      --or-mesh-drift-2-x: 2%;
-      --or-mesh-drift-2-y: -10%;
-      --or-mesh-alpha-2: 100%;
-    }
-    100% {
-      --or-mesh-drift-2-x: -2%;
-      --or-mesh-drift-2-y: 16%;
-      --or-mesh-alpha-2: 72%;
-    }
-  }
-
-  @keyframes or-mesh-float-3 {
-    0% {
-      --or-mesh-drift-3-x: 0%;
-      --or-mesh-drift-3-y: 0%;
-      --or-mesh-alpha-3: 85%;
-    }
-    40% {
-      --or-mesh-drift-3-x: 2%;
-      --or-mesh-drift-3-y: -16%;
-      --or-mesh-alpha-3: 100%;
-    }
-    70% {
-      --or-mesh-drift-3-x: -3%;
-      --or-mesh-drift-3-y: 10%;
-      --or-mesh-alpha-3: 64%;
-    }
-    100% {
-      --or-mesh-drift-3-x: 3%;
-      --or-mesh-drift-3-y: -12%;
-      --or-mesh-alpha-3: 78%;
-    }
-  }
-}
-
-/* Beak micro-animations: the menu pop and the dictation equalizer. Plain
-   keyframes rather than @theme entries — the component reaches them through
-   inline animation shorthands (per-bar delays), so they must ship
-   unconditionally instead of riding on a utility being seen. */
-@keyframes or-pop-in {
-  from {
-    opacity: 0;
-    transform: scale(0.96) translateY(4px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-@keyframes or-eq-bounce {
-  0%,
-  100% {
-    transform: scaleY(0.4);
-  }
-  50% {
-    transform: scaleY(1);
-  }
 }

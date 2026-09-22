@@ -8,6 +8,7 @@ import {
 import { createFileRoute } from "@tanstack/react-router"
 import { Label } from "react-aria-components"
 import { Example, Page } from "../../lib/example"
+import styles from "./select.module.css"
 
 export const Route = createFileRoute("/components/select")({
   component: SelectPage,
@@ -33,8 +34,8 @@ function SelectPage() {
   </SelectContent>
 </Select>`}
       >
-        <Select className="w-56">
-          <Label className="text-sm font-medium">Fruit</Label>
+        <Select className={styles.select}>
+          <Label className={styles.label}>Fruit</Label>
           <SelectTrigger>
             <SelectValue />
           </SelectTrigger>
@@ -50,8 +51,8 @@ function SelectPage() {
         title="Disabled items"
         code={`<SelectItem id="grape" isDisabled>Grape (out of season)</SelectItem>`}
       >
-        <Select className="w-56">
-          <Label className="text-sm font-medium">Fruit</Label>
+        <Select className={styles.select}>
+          <Label className={styles.label}>Fruit</Label>
           <SelectTrigger>
             <SelectValue />
           </SelectTrigger>
@@ -65,8 +66,8 @@ function SelectPage() {
       </Example>
 
       <Example title="Disabled select" code={`<Select isDisabled>…</Select>`}>
-        <Select className="w-56" isDisabled>
-          <Label className="text-sm font-medium">Fruit</Label>
+        <Select className={styles.select} isDisabled>
+          <Label className={styles.label}>Fruit</Label>
           <SelectTrigger>
             <SelectValue />
           </SelectTrigger>

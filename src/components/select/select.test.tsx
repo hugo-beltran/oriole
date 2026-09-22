@@ -10,6 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./select"
+import styles from "./select.module.css"
 
 function DemoSelect(props: {
   onSelectionChange?: (key: React.Key | null) => void
@@ -65,11 +66,11 @@ describe("Select", () => {
     expect(screen.getByRole("button", { name: /banana/i })).toBeInTheDocument()
   })
 
-  it("merges consumer className on the trigger", async () => {
+  it("appends consumer className on the trigger", async () => {
     renderWithAxe(
       <Select>
         <Label>Fruit</Label>
-        <SelectTrigger className="h-12">
+        <SelectTrigger className="consumer">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
@@ -78,8 +79,7 @@ describe("Select", () => {
       </Select>,
     )
     const trigger = screen.getByRole("button", { name: /fruit/i })
-    expect(trigger).toHaveClass("h-12")
-    expect(trigger).not.toHaveClass("h-9")
+    expect(trigger).toHaveClass(styles.trigger, "consumer")
   })
 
   it("has no axe violations closed", async () => {

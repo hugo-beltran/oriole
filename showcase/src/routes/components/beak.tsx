@@ -8,6 +8,7 @@ import { Beak, type BeakItem } from "@mycodemedia/oriole"
 import { createFileRoute } from "@tanstack/react-router"
 import { useState } from "react"
 import { Example, Page } from "../../lib/example"
+import styles from "./beak.module.css"
 
 export const Route = createFileRoute("/components/beak")({
   component: BeakPage,
@@ -58,7 +59,7 @@ function BeakPage() {
   onSend={(text) => reply(text)}
 />`}
       >
-        <div className="w-full max-w-xl">
+        <div className={styles.demo}>
           <Beak
             sources={[
               {
@@ -90,7 +91,7 @@ function BeakPage() {
         title="Pill"
         code={`<Beak variant="pill" models={models} onSend={send} />`}
       >
-        <div className="w-full max-w-xl">
+        <div className={styles.demo}>
           <Beak variant="pill" models={models} />
         </div>
       </Example>
@@ -99,7 +100,7 @@ function BeakPage() {
         title="Bare"
         code={`<Beak placeholder="Reply…" onSend={send} />`}
       >
-        <div className="w-full max-w-xl">
+        <div className={styles.demo}>
           <Beak placeholder="Reply…" />
         </div>
       </Example>

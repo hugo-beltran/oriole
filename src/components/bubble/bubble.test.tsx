@@ -3,6 +3,7 @@ import { createRef } from "react"
 import { describe, expect, it } from "vitest"
 import { renderWithAxe } from "../../../test/test-utils"
 import { Bubble } from "./bubble"
+import styles from "./bubble.module.css"
 
 describe("Bubble", () => {
   it("renders its children", () => {
@@ -10,22 +11,20 @@ describe("Bubble", () => {
     expect(screen.getByText("Hello there")).toBeInTheDocument()
   })
 
-  it("defaults to the system side, aligned left on light driftwood", () => {
+  it("defaults to the system side, aligned left on driftwood", () => {
     renderWithAxe(<Bubble data-testid="bubble">Reply</Bubble>)
     const bubble = screen.getByTestId("bubble")
-    expect(bubble).toHaveClass("self-start")
-    expect(bubble).toHaveClass("bg-driftwood-100/90")
+    expect(bubble).toHaveClass(styles.bubble, styles.system, styles.driftwood)
   })
 
-  it("renders the user side aligned right on nectarine", () => {
+  it("renders the user side aligned right in the fern voice", () => {
     renderWithAxe(
       <Bubble data-testid="bubble" from="user">
         Question
       </Bubble>,
     )
     const bubble = screen.getByTestId("bubble")
-    expect(bubble).toHaveClass("self-end")
-    expect(bubble).toHaveClass("bg-nectarine-300/90")
+    expect(bubble).toHaveClass(styles.user, styles.fern)
   })
 
   it("overrides the fill with the plum color on either side", () => {
@@ -35,9 +34,8 @@ describe("Bubble", () => {
       </Bubble>,
     )
     const bubble = screen.getByTestId("bubble")
-    expect(bubble).toHaveClass("self-end")
-    expect(bubble).toHaveClass("bg-plum-300/90")
-    expect(bubble).not.toHaveClass("bg-nectarine-300/90")
+    expect(bubble).toHaveClass(styles.user, styles.plum)
+    expect(bubble).not.toHaveClass(styles.fern)
   })
 
   it("tightens the bottom corner nearest the speaker as the tail", () => {
@@ -51,8 +49,10 @@ describe("Bubble", () => {
         </Bubble>
       </>,
     )
-    expect(screen.getByTestId("user")).toHaveClass("rounded-br-sm")
-    expect(screen.getByTestId("system")).toHaveClass("rounded-bl-sm")
+    expect(screen.getByTestId("user")).toHaveClass(styles.tailUser)
+    expect(screen.getByTestId("user")).not.toHaveClass(styles.tailSystem)
+    expect(screen.getByTestId("system")).toHaveClass(styles.tailSystem)
+    expect(screen.getByTestId("system")).not.toHaveClass(styles.tailUser)
   })
 
   it("keeps the corner full-radius with tail={false}", () => {
@@ -61,7 +61,7 @@ describe("Bubble", () => {
         Follow-up
       </Bubble>,
     )
-    expect(screen.getByTestId("bubble")).not.toHaveClass("rounded-br-sm")
+    expect(screen.getByTestId("bubble")).not.toHaveClass(styles.tailUser)
   })
 
   it("renders string children as Markdown when enabled", () => {
@@ -74,6 +74,7 @@ describe("Bubble", () => {
     const strong = screen.getByText("55+")
     expect(strong.tagName).toBe("STRONG")
     expect(screen.getByText("18–24").tagName).toBe("CODE")
+    expect(screen.getByRole("list").parentElement).toHaveClass(styles.markdown)
   })
 
   it("treats markup as plain text without the markdown flag", () => {
@@ -93,16 +94,13 @@ describe("Bubble", () => {
     expect(screen.getByTestId("chip")).toBeInTheDocument()
   })
 
-  it("merges a consumer className and resolves conflicts in its favor", () => {
+  it("appends a consumer className after its own", () => {
     renderWithAxe(
-      <Bubble data-testid="bubble" className="max-w-full font-medium">
+      <Bubble data-testid="bubble" className="consumer">
         Wide
       </Bubble>,
     )
-    const bubble = screen.getByTestId("bubble")
-    expect(bubble).toHaveClass("font-medium")
-    expect(bubble).toHaveClass("max-w-full")
-    expect(bubble).not.toHaveClass("max-w-[75%]")
+    expect(screen.getByTestId("bubble")).toHaveClass(styles.bubble, "consumer")
   })
 
   it("forwards its ref to the underlying DOM element", () => {

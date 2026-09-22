@@ -17,7 +17,7 @@ export {
 /**
  * Made with Love
  */
-export { Canvas } from "./components/canvas"
+export { Canvas, type CanvasProps } from "./components/canvas/index.js"
 export {
   Nest,
   NestChat,
@@ -47,4 +47,4 @@ export {
   SelectValue,
   type SelectValueProps,
 } from "./components/select/index.js"
-export { cn, focusRing } from "./lib/utils.js"
+export { cn } from "./lib/utils.js"

@@ -1,0 +1,241 @@
+/* Canvas — the full-height branded backdrop. Everything the mesh needs lives
+   here, co-located with its consumer: the typed drift properties, the
+   undergrowth gradient, the float animation and its keyframes. Colors come
+   from the --or-* tokens in styles/theme.css. */
+
+/* Mesh drift offsets and alphas — typed so the browser can interpolate them.
+   The gradient mesh adds the offsets to its literal blob positions and
+   scales each blob's color through its alpha; everything rests at the static
+   mesh (0% offset, 100% alpha) unless `.animated` runs. Browsers
+   without @property fall back to the static mesh via the var() fallbacks.
+   Three groups shared across blobs, each driven by its own animation with a
+   different period, so the layers float and fade out of phase with each
+   other rather than in lockstep. */
+@property --or-mesh-drift-1-x {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 0%;
+}
+@property --or-mesh-drift-1-y {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 0%;
+}
+@property --or-mesh-drift-2-x {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 0%;
+}
+@property --or-mesh-drift-2-y {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 0%;
+}
+@property --or-mesh-drift-3-x {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 0%;
+}
+@property --or-mesh-drift-3-y {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 0%;
+}
+@property --or-mesh-alpha-1 {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 100%;
+}
+@property --or-mesh-alpha-2 {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 100%;
+}
+@property --or-mesh-alpha-3 {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 100%;
+}
+
+/* Component rules live in the `components` cascade layer (see
+   styles/global.css) so any unlayered consumer class wins by cascade order.
+   The statement pins `base` below `components` even when this module is
+   parsed before global.css, so the reset never beats a component rule. */
+@layer base, components;
+
+@layer components {
+  /* The Canvas mesh — the fern "undergrowth": fern tints over the driftwood
+     ground, with a berry and nectarine tint. Blob positions are base + drift
+     offset, and each blob's color is scaled by its group's alpha (100% at
+     rest, 60–100% while animating). The first fern blob keeps a fixed corner
+     anchor at full alpha so the composition stays grounded while the other
+     layers float. */
+  .canvas {
+    background-color: var(--or-driftwood-100);
+    background-image:
+      radial-gradient(at 80% 0%, var(--or-fern-50) 0px, transparent 50%),
+      radial-gradient(
+        at calc(0% + var(--or-mesh-drift-1-x, 0%))
+          calc(0% + var(--or-mesh-drift-1-y, 0%)),
+        color-mix(
+            in oklch,
+            var(--or-berry-50) var(--or-mesh-alpha-1, 100%),
+            transparent
+          )
+          0px,
+        transparent 50%
+      ),
+      radial-gradient(
+        at calc(58% + var(--or-mesh-drift-2-x, 0%))
+          calc(24% + var(--or-mesh-drift-2-y, 0%)),
+        color-mix(
+            in oklch,
+            var(--or-driftwood-100) var(--or-mesh-alpha-2, 100%),
+            transparent
+          )
+          0px,
+        transparent 50%
+      ),
+      radial-gradient(
+        at calc(115% + var(--or-mesh-drift-3-x, 0%))
+          calc(80% + var(--or-mesh-drift-3-y, 0%)),
+        color-mix(
+            in oklch,
+            var(--or-fern-200) var(--or-mesh-alpha-3, 100%),
+            transparent
+          )
+          0px,
+        transparent 50%
+      ),
+      radial-gradient(
+        at calc(92% + var(--or-mesh-drift-1-x, 0%))
+          calc(60% + var(--or-mesh-drift-1-y, 0%)),
+        color-mix(
+            in oklch,
+            var(--or-driftwood-100) var(--or-mesh-alpha-1, 100%),
+            transparent
+          )
+          0px,
+        transparent 50%
+      ),
+      radial-gradient(
+        at calc(12% + var(--or-mesh-drift-2-x, 0%))
+          calc(100% + var(--or-mesh-drift-2-y, 0%)),
+        color-mix(
+            in oklch,
+            var(--or-fern-800) var(--or-mesh-alpha-2, 100%),
+            transparent
+          )
+          0px,
+        transparent 50%
+      ),
+      radial-gradient(
+        at calc(33% + var(--or-mesh-drift-3-x, 0%))
+          calc(45% + var(--or-mesh-drift-3-y, 0%)),
+        color-mix(
+            in oklch,
+            var(--or-nectarine-100) var(--or-mesh-alpha-3, 80%),
+            transparent 50%
+          )
+          0px,
+        transparent 50%
+      );
+    color: var(--or-foreground);
+    display: flex;
+    min-height: 100vh;
+    position: relative;
+  }
+
+  /* Mesh float: one animation per blob group, each with its own period
+     (co-prime-ish durations so the phases never re-sync) and a negative
+     delay so they start already spread apart. Motion is y-dominant with a
+     small x sway; alpha breathes between 60% and 100%. alternate keeps every
+     loop seamless without the last keyframe having to return to 0. */
+  .animated {
+    animation:
+      meshFloat1 12s ease-in-out infinite alternate,
+      meshFloat2 34s ease-in-out -10s infinite alternate,
+      meshFloat3 27s ease-in-out -24s infinite alternate;
+
+    @media (prefers-reduced-motion: reduce) {
+      animation: none;
+    }
+  }
+
+  .noise {
+    height: 100%;
+    inset: 0;
+    pointer-events: none;
+    position: absolute;
+    width: 100%;
+  }
+}
+
+@keyframes meshFloat1 {
+  0% {
+    --or-mesh-drift-1-x: 0%;
+    --or-mesh-drift-1-y: 0%;
+    --or-mesh-alpha-1: 100%;
+  }
+  35% {
+    --or-mesh-drift-1-x: 3%;
+    --or-mesh-drift-1-y: -14%;
+    --or-mesh-alpha-1: 68%;
+  }
+  65% {
+    --or-mesh-drift-1-x: -2%;
+    --or-mesh-drift-1-y: 8%;
+    --or-mesh-alpha-1: 92%;
+  }
+  100% {
+    --or-mesh-drift-1-x: 2%;
+    --or-mesh-drift-1-y: -20%;
+    --or-mesh-alpha-1: 60%;
+  }
+}
+
+@keyframes meshFloat2 {
+  0% {
+    --or-mesh-drift-2-x: 0%;
+    --or-mesh-drift-2-y: 0%;
+    --or-mesh-alpha-2: 70%;
+  }
+  30% {
+    --or-mesh-drift-2-x: -3%;
+    --or-mesh-drift-2-y: 12%;
+    --or-mesh-alpha-2: 41%;
+  }
+  60% {
+    --or-mesh-drift-2-x: 2%;
+    --or-mesh-drift-2-y: -10%;
+    --or-mesh-alpha-2: 72%;
+  }
+  100% {
+    --or-mesh-drift-2-x: -2%;
+    --or-mesh-drift-2-y: 16%;
+    --or-mesh-alpha-2: 40%;
+  }
+}
+
+@keyframes meshFloat3 {
+  0% {
+    --or-mesh-drift-3-x: 0%;
+    --or-mesh-drift-3-y: 0%;
+    --or-mesh-alpha-3: 85%;
+  }
+  40% {
+    --or-mesh-drift-3-x: 2%;
+    --or-mesh-drift-3-y: -16%;
+    --or-mesh-alpha-3: 100%;
+  }
+  70% {
+    --or-mesh-drift-3-x: -3%;
+    --or-mesh-drift-3-y: 10%;
+    --or-mesh-alpha-3: 64%;
+  }
+  100% {
+    --or-mesh-drift-3-x: 3%;
+    --or-mesh-drift-3-y: -12%;
+    --or-mesh-alpha-3: 78%;
+  }
+}

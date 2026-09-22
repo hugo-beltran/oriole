@@ -1,0 +1,90 @@
+.ramps {
+  > * + * {
+    margin-top: 1.25rem;
+  }
+}
+
+.rampHead {
+  align-items: baseline;
+  column-gap: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.rampName {
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.25rem;
+}
+
+.tag {
+  align-self: center;
+  background-color: var(--or-muted);
+  border-radius: 9999px;
+  color: color-mix(in oklab, var(--or-foreground) 70%, transparent);
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  padding: 1px 0.375rem;
+}
+
+.note {
+  color: var(--or-muted-foreground);
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
+.grid {
+  display: grid;
+  gap: 0.25rem;
+  grid-template-columns: repeat(11, minmax(0, 1fr));
+  margin-top: 0.5rem;
+}
+
+.step {
+  min-width: 0;
+}
+
+/* the swatch reads its color from --swatch, set inline per step */
+.swatch {
+  background-color: var(--swatch);
+  border: 1px solid var(--or-border);
+  border-radius: calc(var(--or-radius) - 0.125rem);
+  height: 2.25rem;
+}
+
+.swatchMarked {
+  box-shadow:
+    0 0 0 1px var(--or-background),
+    0 0 0 3px var(--or-ring);
+}
+
+.label {
+  color: var(--or-muted-foreground);
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+  margin-top: 0.25rem;
+  text-align: center;
+}
+
+.labelMarked {
+  color: var(--or-foreground);
+  font-weight: 500;
+}
+
+.usageHeading {
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.75rem;
+}
+
+.usage {
+  color: var(--or-muted-foreground);
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  margin-top: 0.5rem;
+}
+
+.code {
+  font-size: 0.75rem;
+}

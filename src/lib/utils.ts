@@ -1,11 +1,8 @@
-import { cva } from "class-variance-authority"
 import { type ClassValue, clsx } from "clsx"
-import { twMerge } from "tailwind-merge"
 
+/** Join class names, dropping falsy values. No utility merging: components
+ * put their rules in `@layer components`, so a later or unlayered class wins
+ * by cascade order. */
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+  return clsx(inputs)
 }
-
-export const focusRing = cva(
-  "outline-none data-[focus-visible]:ring-2 data-[focus-visible]:ring-ring data-[focus-visible]:ring-offset-2 data-[focus-visible]:ring-offset-background",
-)

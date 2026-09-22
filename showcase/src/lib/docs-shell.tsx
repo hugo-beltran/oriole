@@ -1,7 +1,6 @@
-import { Home01Icon } from "@hugeicons/core-free-icons"
+import { Home01Icon, SourceCodeIcon } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
 import {
-  cn,
   Nest,
   NestChat,
   NestGroup,
@@ -13,6 +12,7 @@ import {
 } from "@mycodemedia/oriole"
 import { Outlet, useLocation, useNavigate } from "@tanstack/react-router"
 import OrioleMark from "../assets/oriole-wordmark.svg?react"
+import styles from "./docs-shell.module.css"
 
 type DocsPage = { label: string; to: string }
 
@@ -39,7 +39,7 @@ export function DocsShell() {
   const row = (page: DocsPage) => (
     <NestChat
       key={page.to}
-      className={cn(pathname === page.to && "bg-card/80 text-foreground")}
+      className={pathname === page.to ? styles.active : undefined}
       onPress={() => navigate({ to: page.to })}
     >
       {page.label}
@@ -48,8 +48,8 @@ export function DocsShell() {
 
   return (
     <NestProvider>
-      <div className="flex h-[calc(100vh-8rem)] items-start gap-2">
-        <Nest className="h-full">
+      <div className={styles.shell}>
+        <Nest className={styles.nest}>
           <NestHead>
             <OrioleMark aria-hidden />
           </NestHead>
@@ -62,17 +62,28 @@ export function DocsShell() {
             </NestLink>
           </NestGroup>
           {/* flex-none: only the components list should absorb leftover height */}
-          <NestGroup title="Foundations" className="flex-none">
+          <NestGroup title="Foundations" className={styles.flexNone}>
             {foundations.map(row)}
           </NestGroup>
           <NestGroup title="Components" searchable>
             {components.map(row)}
           </NestGroup>
+          {/* the machine-readable reference: point an agent here */}
+          <NestGroup title="Reference" className={styles.flexNone}>
+            <NestLink
+              icon={<HugeiconsIcon icon={SourceCodeIcon} size={18} />}
+              onPress={() =>
+                window.open(`${import.meta.env.BASE_URL}llms.txt`, "_blank")
+              }
+            >
+              For agents · llms.txt
+            </NestLink>
+          </NestGroup>
         </Nest>
 
-        <Perch className="relative flex h-full min-w-0 flex-1">
-          <NestToggle className="absolute left-2 top-2 z-10" />
-          <div className="min-w-0 flex-1 overflow-y-auto py-8 ps-12 pe-8 scrollbar-track-transparent scrollbar-thumb-driftwood-300/50">
+        <Perch className={styles.perch}>
+          <NestToggle className={styles.toggle} />
+          <div className={styles.content}>
             <Outlet />
           </div>
         </Perch>

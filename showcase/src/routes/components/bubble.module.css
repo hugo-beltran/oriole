@@ -1,0 +1,15 @@
+.thread {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.threadTight {
+  gap: 0.25rem;
+}
+
+.wide {
+  border-radius: calc(var(--or-radius) - 0.125rem);
+  max-width: 100%;
+}

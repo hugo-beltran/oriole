@@ -1,0 +1,339 @@
+/* Nest — the collapsible navigation strip. Collapse state is the aside's
+   `data-collapsed` attribute; `.collapseFade` descendants read it so rows
+   never re-render. */
+/* Component rules live in the `components` cascade layer (see
+   styles/global.css) so any unlayered consumer class wins by cascade order.
+   The statement pins `base` below `components` even when this module is
+   parsed before global.css, so the reset never beats a component rule. */
+@layer base, components;
+
+@layer components {
+  /* Collapse motion follows shadcn's sidebar: one unified 200ms linear
+     clock. The aside's width clips a fixed-width inner column, so row copy
+     is swept under the clip edge rather than animated separately; only the
+     brand, the toggles, and groups cross-fade — all on the same clock.
+     Nothing unmounts and rows keep constant geometry, so icons never shift. */
+  .nest {
+    display: flex;
+    flex-direction: column;
+    transition: width 280ms cubic-bezier(0.34, 1.4, 0.64, 1);
+    width: 12.5rem;
+
+    &[data-collapsed] {
+      width: 3.5rem;
+    }
+  }
+
+  .fade {
+    transition: opacity 200ms linear;
+  }
+
+  .faded {
+    opacity: 0;
+  }
+
+  /* Row trimmings (shortcut hints, detail stats) that fade out when the nest
+     collapses — CSS-only via the aside's flag. */
+  .collapseFade {
+    transition: opacity 200ms linear;
+  }
+
+  .nest[data-collapsed] .collapseFade {
+    opacity: 0;
+  }
+
+  .chromeButton {
+    align-items: center;
+    border-radius: var(--or-radius);
+    color: var(--or-muted-foreground);
+    display: flex;
+    flex-shrink: 0;
+    height: 2rem;
+    justify-content: center;
+    outline: none;
+    transition:
+      color 150ms,
+      background-color 150ms;
+    width: 2rem;
+
+    &[data-focus-visible] {
+      box-shadow: 0 0 0 2px var(--or-ring);
+    }
+
+    &[data-hovered] {
+      background-color: color-mix(in oklab, var(--or-card) 70%, transparent);
+      color: var(--or-foreground);
+    }
+
+    &[data-pressed] {
+      background-color: var(--or-card);
+    }
+  }
+
+  .toggle {
+    color: var(--or-fern-800);
+  }
+
+  /* ── head ─────────────────────────────────────────── */
+  .head {
+    align-items: center;
+    display: flex;
+    flex-shrink: 0;
+    min-width: 0;
+    overflow: hidden;
+    padding-block: 0.5rem;
+    position: relative;
+    width: 100%;
+  }
+
+  .headIconic {
+    padding-inline: 1rem;
+  }
+
+  .headCustom {
+    gap: 0.25rem;
+    justify-content: space-around;
+    padding-inline: 0.25rem;
+
+    svg {
+      max-width: 6rem;
+      min-width: 3rem;
+    }
+  }
+
+  .headIcon {
+    align-items: center;
+    display: flex;
+    flex-shrink: 0;
+    height: 1.5rem;
+    justify-content: center;
+    width: 1.5rem;
+  }
+
+  .headLabel {
+    flex: 1;
+    font-family: var(--or-font-display);
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    margin-left: 0.375rem;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* ── group ────────────────────────────────────────── */
+  .groupTitled {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    margin-top: 0.75rem;
+    min-height: 0;
+  }
+
+  .groupBar {
+    flex-shrink: 0;
+    height: 2rem;
+    margin-bottom: 0.25rem;
+    margin-inline: 0.5rem;
+    position: relative;
+  }
+
+  .search {
+    align-items: center;
+    backdrop-filter: blur(24px);
+    background-color: color-mix(in oklab, var(--or-card) 60%, transparent);
+    border: 1px solid
+      color-mix(in oklab, var(--or-driftwood-50) 50%, transparent);
+    border-radius: var(--or-radius);
+    display: flex;
+    inset: 0;
+    position: absolute;
+  }
+
+  .searchIcon {
+    color: var(--or-muted-foreground);
+    flex-shrink: 0;
+    margin-left: 0.5rem;
+  }
+
+  .searchInput {
+    background-color: transparent;
+    color: var(--or-foreground);
+    flex: 1;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    margin-left: 0.375rem;
+    min-width: 0;
+    outline: none;
+
+    &::placeholder {
+      color: var(--or-muted-foreground);
+    }
+  }
+
+  .groupToggle {
+    align-items: center;
+    border-radius: var(--or-radius);
+    bottom: 0;
+    color: var(--or-muted-foreground);
+    display: flex;
+    font-size: 0.75rem;
+    font-weight: 500;
+    gap: 0.25rem;
+    left: 0;
+    line-height: 1rem;
+    outline: none;
+    padding-inline: 0.5rem;
+    position: absolute;
+    top: 0;
+
+    &[data-focus-visible] {
+      box-shadow: 0 0 0 2px var(--or-ring);
+    }
+
+    &[data-hovered] {
+      color: var(--or-foreground);
+    }
+  }
+
+  .chevron {
+    transition: transform 200ms;
+  }
+
+  .chevronOpen {
+    transform: rotate(90deg);
+  }
+
+  .searchOpen {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+
+  .panelScroll {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+  }
+
+  .list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding-inline: 0.5rem;
+    position: relative;
+  }
+
+  /* one gliding hover highlight shared by the group's rows */
+  .glide {
+    background-color: color-mix(in oklab, var(--or-card) 70%, transparent);
+    border-radius: var(--or-radius);
+    inset-inline: 0.5rem;
+    opacity: 0;
+    pointer-events: none;
+    position: absolute;
+    transition:
+      transform 200ms,
+      height 200ms,
+      opacity 200ms;
+    z-index: 0;
+  }
+
+  .gliding {
+    opacity: 1;
+  }
+
+  /* ── rows ─────────────────────────────────────────── */
+  .row {
+    align-items: center;
+    border-radius: var(--or-radius);
+    color: color-mix(in oklab, var(--or-foreground) 80%, transparent);
+    display: flex;
+    flex-shrink: 0;
+    font-size: 0.875rem;
+    height: 2rem;
+    line-height: 1.25rem;
+    min-width: 0;
+    outline: none;
+    overflow: hidden;
+    padding-inline: 0.5rem;
+    position: relative;
+    transition:
+      color 150ms,
+      background-color 150ms;
+    width: 100%;
+    z-index: 10;
+
+    &[data-focus-visible] {
+      box-shadow: 0 0 0 2px var(--or-ring);
+    }
+
+    &[data-hovered] {
+      color: var(--or-foreground);
+    }
+
+    &[data-pressed] {
+      background-color: color-mix(in oklab, var(--or-card) 80%, transparent);
+    }
+
+    &[data-disabled] {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+  }
+
+  .rowIcon {
+    align-items: center;
+    color: var(--or-muted-foreground);
+    display: flex;
+    flex-shrink: 0;
+    height: 1.5rem;
+    justify-content: center;
+    width: 1.5rem;
+  }
+
+  .rowLabel {
+    flex: 1;
+    margin-left: 0.375rem;
+    min-width: 0;
+    overflow: hidden;
+    text-align: left;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .chatLabel {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-align: left;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .rowDetail {
+    color: var(--or-muted-foreground);
+    flex-shrink: 0;
+    font-size: 0.75rem;
+    font-variant-numeric: tabular-nums;
+    font-weight: 500;
+    line-height: 1rem;
+    margin-left: 0.5rem;
+  }
+
+  .rowShortcut {
+    background-color: color-mix(in oklab, var(--or-card) 60%, transparent);
+    border: 1px solid
+      color-mix(in oklab, var(--or-driftwood-50) 50%, transparent);
+    border-radius: 0.25rem;
+    color: var(--or-muted-foreground);
+    flex-shrink: 0;
+    font-family:
+      ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+      "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    font-size: 10px;
+    margin-left: 0.5rem;
+    padding-inline: 0.25rem;
+  }
+}

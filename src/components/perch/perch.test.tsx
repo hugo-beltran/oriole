@@ -2,6 +2,7 @@ import { screen } from "@testing-library/react"
 import { describe, expect, it } from "vitest"
 import { renderWithAxe } from "../../../test/test-utils"
 import { Perch } from "./perch"
+import styles from "./perch.module.css"
 
 describe("Perch", () => {
   it("renders children above the canvas surface", () => {
@@ -11,17 +12,15 @@ describe("Perch", () => {
       </Perch>,
     )
     expect(screen.getByText("Floating content")).toBeInTheDocument()
-    expect(screen.getByTestId("perch")).toHaveClass("backdrop-blur-xl")
+    expect(screen.getByTestId("perch")).toHaveClass(styles.perch)
   })
 
-  it("merges consumer className and resolves conflicts", () => {
+  it("appends consumer className after its own", () => {
     renderWithAxe(
-      <Perch data-testid="perch" className="rounded-none">
+      <Perch data-testid="perch" className="consumer">
         x
       </Perch>,
     )
-    const perch = screen.getByTestId("perch")
-    expect(perch).toHaveClass("rounded-none")
-    expect(perch).not.toHaveClass("rounded-2xl")
+    expect(screen.getByTestId("perch")).toHaveClass(styles.perch, "consumer")
   })
 })

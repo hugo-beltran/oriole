@@ -99,6 +99,11 @@ Everything is plain CSS, compiled by Vite with Lightning CSS. No utility framewo
 - **`src/styles/theme.css`** is tokens only: the five `--or-*` color ramps, the semantic
   aliases (`--or-primary`, `--or-border`, …), radius, and the display face. Re-brand by
   redefining them; nothing else needs to change.
+- **Browser targets.** Colors ship as written in oklch. Two settings in
+  `showcase/vite.config.ts` keep it that way: `css.lightningcss.targets` is browserslist
+  "defaults" minus the two targets without oklch (Chrome 109 and Opera Mini), and
+  `build.cssTarget` names the same floor for the minify pass, which otherwise inherits the
+  JS target and lowers oklch to `lab()` with hex fallbacks.
 - **Components** own their rules in a co-located `src/components/<name>/<name>.module.css`
   wrapped in `@layer components` — layout, `var(--or-*)` tokens, `@property`
   declarations, keyframes. Variants are declared with `cva` over the module's classes and

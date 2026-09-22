@@ -33,12 +33,22 @@ export default defineConfig({
   css: {
     transformer: "lightningcss",
     lightningcss: {
-      targets: browserslistToTargets(browserslist("defaults")),
+      // "defaults" minus the two targets without oklch (Chrome 109, the last
+      // build for Windows 7/8, and Opera Mini); with those gone Lightning CSS
+      // emits the oklch tokens as written instead of lowering them to lab()
+      // with a hex fallback, so dev and build resolve colors identically.
+      targets: browserslistToTargets(
+        browserslist("defaults, not chrome < 111, not op_mini all"),
+      ),
     },
   },
   build: {
     cssMinify: "lightningcss",
     target: "es2022",
+    // The minify pass derives its Lightning CSS targets from cssTarget, not
+    // from css.lightningcss.targets; without this it would inherit "es2022"
+    // and lower oklch to lab() with hex fallbacks.
+    cssTarget: ["chrome111", "edge111", "firefox113", "safari15.4"],
   },
   resolve: {
     alias: {

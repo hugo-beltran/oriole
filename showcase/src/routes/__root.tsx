@@ -8,7 +8,7 @@ export const Route = createRootRoute({
 
 function RootLayout() {
   return (
-    <Canvas>
+    <Canvas animated>
       <main className={styles.main}>
         <Outlet />
       </main>
